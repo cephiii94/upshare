@@ -32,14 +32,17 @@ export default async function SubdomainPage({ params }: SubdomainPageProps) {
   const supabase = await createClient();
 
   // Validate tenant
-  const { data: tenant, error } = await supabase
+  const { data: tenantData, error } = await supabase
     .rpc("get_tenant_with_details", { p_subdomain: subdomain })
     .single();
 
-  if (error || !tenant) {
+  if (error || !tenantData) {
     // Return 404 if tenant doesn't exist or isn't active
     notFound();
   }
+
+  const tenant = tenantData as any;
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gradient-hero">
