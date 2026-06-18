@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { resend, fromEmail } from "@/lib/email/resend";
 
 export async function POST(req: NextRequest) {
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. Update Database (Supabase) via Admin (bypass RLS)
+    const supabaseAdmin = getSupabaseAdmin();
     
     // a. Upsert Subscription
     const now = new Date();

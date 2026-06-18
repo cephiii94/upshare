@@ -28,8 +28,8 @@
 .env.production
 .env.production.local
 # File example boleh di-commit (tidak ada secret nyata)
-!.env.local.example
-!.env.example
+.env.local.example
+.env.example
 
 # ── Supabase ───────────────────────────────────
 .supabase/
