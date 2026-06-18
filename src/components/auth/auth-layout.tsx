@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 interface AuthLayoutProps {
@@ -21,8 +21,8 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group relative w-fit">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl gradient-brand shadow-lg group-hover:scale-105 transition-transform">
-            <Zap className="w-5 h-5 text-white" />
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl shadow-lg group-hover:scale-105 transition-transform overflow-hidden">
+            <Image src="/logo.png" alt="Upshare Logo" width={36} height={36} className="w-full h-full object-cover" />
           </div>
           <span className="text-2xl font-bold text-foreground">
             Up<span className="text-gradient-brand">share</span>
@@ -81,8 +81,8 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
           href="/"
           className="flex items-center gap-2 group mb-10 lg:hidden"
         >
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg gradient-brand shadow-md">
-            <Zap className="w-4 h-4 text-white" />
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg shadow-md overflow-hidden">
+            <Image src="/logo.png" alt="Upshare Logo" width={32} height={32} className="w-full h-full object-cover" />
           </div>
           <span className="text-xl font-bold text-foreground">
             Up<span className="text-gradient-brand">share</span>

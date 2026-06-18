@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
 
@@ -27,8 +28,8 @@ export function MarketingNavbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg gradient-brand shadow-md group-hover:scale-105 transition-transform duration-200">
-              <Zap className="w-4 h-4 text-white" />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg group-hover:scale-105 transition-transform duration-200 overflow-hidden">
+              <Image src="/logo.png" alt="Upshare Logo" width={32} height={32} className="w-full h-full object-cover" />
             </div>
             <span className="text-xl font-bold text-foreground">
               Up<span className="text-gradient-brand">share</span>
