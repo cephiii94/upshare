@@ -25,14 +25,18 @@ export async function proxy(req: NextRequest) {
   // Remove port if exists (for localhost:3000)
   hostname = hostname.split(":")[0];
 
-  // Define the base domain
   const isLocalhost = hostname.endsWith("localhost");
-  const baseDomain = isLocalhost
-    ? "localhost"
-    : (process.env.NEXT_PUBLIC_ROOT_DOMAIN || "upshare.id");
 
   // Extract the subdomain
-  const subdomain = hostname.replace(new RegExp(`\\.?${baseDomain}$`), "");
+  let subdomain = "";
+  if (isLocalhost) {
+    subdomain = hostname.replace(/\.?localhost$/, "");
+  } else if (hostname.endsWith(".vercel.app")) {
+    subdomain = "";
+  } else {
+    const baseDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "upshare.id";
+    subdomain = hostname.replace(new RegExp(`\\.?${baseDomain}$`), "");
+  }
 
   // Ignore default subdomains or no subdomain
   const reservedSubdomains = ["www", "app", "api", "admin"];
