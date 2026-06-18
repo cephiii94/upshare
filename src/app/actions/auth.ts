@@ -62,11 +62,12 @@ export async function loginAction(
   });
 
   if (error) {
+    console.error("Login error details:", error);
     return {
       message:
         error.message === "Invalid login credentials"
           ? "Email atau password salah."
-          : "Terjadi kesalahan. Silakan coba lagi.",
+          : `Terjadi kesalahan: ${error.message}`,
     };
   }
 
@@ -104,6 +105,31 @@ export async function registerAction(
       return { message: "Email ini sudah terdaftar. Silakan login." };
     }
     return { message: "Terjadi kesalahan saat mendaftar. Silakan coba lagi." };
+  }
+
+  // Kirim Welcome Email (Fire and forget, error tidak memblokir pendaftaran)
+  try {
+    const { resend, fromEmail } = await import("@/lib/email/resend");
+    
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <h2 style="color: #0F62FE;">Selamat Datang di Upshare! 🚀</h2>
+        <p>Halo ${validated.data.full_name},</p>
+        <p>Terima kasih telah bergabung dengan Upshare, platform berbagi file premium Anda.</p>
+        <p>Silakan konfirmasi email Anda dengan mengklik link yang telah kami kirim secara terpisah oleh sistem keamanan kami.</p>
+        <br/>
+        <p>Salam hangat,<br/><strong>Tim Upshare</strong></p>
+      </div>
+    `;
+
+    await resend.emails.send({
+      from: `Upshare <${fromEmail}>`,
+      to: validated.data.email,
+      subject: "Selamat Datang di Upshare",
+      html: emailHtml,
+    });
+  } catch (emailErr) {
+    console.error("Gagal mengirim welcome email:", emailErr);
   }
 
   return {

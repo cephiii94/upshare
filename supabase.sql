@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   id          UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name   TEXT,
   avatar_url  TEXT,
+  is_admin    BOOLEAN NOT NULL DEFAULT false,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -65,6 +66,7 @@ CREATE TABLE IF NOT EXISTS public.tenants (
   id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id       UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   subdomain     TEXT NOT NULL UNIQUE,
+  target_url    TEXT,
   display_name  TEXT,
   bio           TEXT,
   avatar_url    TEXT,
@@ -203,6 +205,7 @@ CREATE OR REPLACE FUNCTION public.get_tenant_with_details(p_subdomain TEXT)
 RETURNS TABLE (
   tenant_id     UUID,
   subdomain     TEXT,
+  target_url    TEXT,
   display_name  TEXT,
   bio           TEXT,
   avatar_url    TEXT,
@@ -219,6 +222,7 @@ BEGIN
   SELECT
     t.id,
     t.subdomain,
+    t.target_url,
     t.display_name,
     t.bio,
     COALESCE(t.avatar_url, p.avatar_url),

@@ -7,9 +7,9 @@ import { MarketingNavbar } from "@/components/marketing/navbar";
 import { MarketingFooter } from "@/components/marketing/footer";
 
 export const metadata: Metadata = {
-  title: "Upshare — Platform Berbagi File Profesional",
+  title: "Upshare — Kustom Subdomain & Forwarding Platform",
   description:
-    "Buat subdomain kustom dan bagikan file Anda secara profesional. Upshare adalah solusi terbaik untuk individu dan bisnis yang ingin tampil profesional secara online.",
+    "Klaim subdomain kustom premium dan arahkan ke website Netlify, Vercel, atau Github Pages Anda secara instan dengan Upshare.",
 };
 
 export default function HomePage() {

@@ -4,21 +4,23 @@ import Link from "next/link";
 import { CheckCircle2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { createCheckoutSession } from "@/app/actions/checkout";
 
 const plans = [
   {
     name: "Gratis",
+    id: null,
     price: "Rp 0",
     period: "selamanya",
     description: "Cocok untuk memulai dan mencoba platform Upshare.",
     badge: null,
     features: [
       { text: "1 Subdomain kustom", included: true },
-      { text: "Upload hingga 500MB/bulan", included: true },
-      { text: "Maks. 10 file aktif", included: true },
+      { text: "SSL (HTTPS) Otomatis", included: true },
+      { text: "Analitik dasar", included: true },
       { text: "Tampilan default Upshare", included: true },
-      { text: "Analitik dasar", included: false },
       { text: "Custom branding", included: false },
+      { text: "Multi-target proxy", included: false },
       { text: "Prioritas support", included: false },
     ],
     cta: "Mulai Gratis",
@@ -27,17 +29,17 @@ const plans = [
   },
   {
     name: "Pro",
+    id: "pro",
     price: "Rp 49.000",
     period: "per bulan",
-    description: "Untuk profesional yang ingin tampil maksimal.",
+    description: "Untuk profesional yang memiliki beberapa project.",
     badge: "Paling Populer",
     features: [
-      { text: "1 Subdomain kustom premium", included: true },
-      { text: "Upload hingga 10GB/bulan", included: true },
-      { text: "File aktif tak terbatas", included: true },
-      { text: "Custom branding & tema", included: true },
+      { text: "Hingga 5 Subdomain kustom", included: true },
+      { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik lengkap", included: true },
-      { text: "Proteksi password", included: true },
+      { text: "Custom branding & tema", included: true },
+      { text: "Multi-target proxy", included: true },
       { text: "Prioritas support", included: false },
     ],
     cta: "Mulai Pro",
@@ -46,17 +48,17 @@ const plans = [
   },
   {
     name: "Business",
+    id: "business",
     price: "Rp 149.000",
     period: "per bulan",
-    description: "Solusi lengkap untuk tim dan bisnis yang berkembang.",
+    description: "Solusi lengkap tanpa batas untuk tim dan agensi.",
     badge: null,
     features: [
-      { text: "5 Subdomain kustom", included: true },
-      { text: "Upload tak terbatas", included: true },
-      { text: "File aktif tak terbatas", included: true },
-      { text: "Custom branding & tema", included: true },
+      { text: "Subdomain kustom UNLIMITED", included: true },
+      { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik advanced + API", included: true },
-      { text: "Proteksi password & 2FA", included: true },
+      { text: "Custom branding & tema", included: true },
+      { text: "Multi-target proxy", included: true },
       { text: "Prioritas support 24/7", included: true },
     ],
     cta: "Mulai Business",
@@ -151,17 +153,34 @@ export function PricingSection() {
               </ul>
 
               {/* CTA */}
-              <Button
-                variant={plan.badge ? "default" : plan.ctaVariant}
-                className={
-                  plan.badge
-                    ? "gradient-brand text-white border-0 hover:opacity-90 w-full"
-                    : "w-full"
-                }
-                asChild
-              >
-                <Link href={plan.href}>{plan.cta}</Link>
-              </Button>
+              {plan.id ? (
+                <form action={createCheckoutSession} className="w-full">
+                  <input type="hidden" name="planId" value={plan.id} />
+                  <Button
+                    type="submit"
+                    variant={plan.badge ? "default" : plan.ctaVariant}
+                    className={
+                      plan.badge
+                        ? "gradient-brand text-white border-0 hover:opacity-90 w-full"
+                        : "w-full"
+                    }
+                  >
+                    {plan.cta}
+                  </Button>
+                </form>
+              ) : (
+                <Button
+                  variant={plan.badge ? "default" : plan.ctaVariant}
+                  className={
+                    plan.badge
+                      ? "gradient-brand text-white border-0 hover:opacity-90 w-full"
+                      : "w-full"
+                  }
+                  asChild
+                >
+                  <Link href={plan.href}>{plan.cta}</Link>
+                </Button>
+              )}
             </div>
           ))}
         </div>

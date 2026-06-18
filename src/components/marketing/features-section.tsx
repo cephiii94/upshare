@@ -12,49 +12,49 @@ import {
 const features = [
   {
     icon: Globe,
-    title: "Subdomain Kustom",
+    title: "Subdomain Premium",
     description:
-      "Dapatkan subdomain eksklusif Anda sendiri seperti nama.upshare.id. Tampilkan identitas profesional Anda kepada dunia.",
+      "Dapatkan subdomain eksklusif Anda sendiri seperti nama.upshare.id tanpa perlu membeli domain secara terpisah.",
     color: "text-blue-500",
     bg: "bg-blue-50 dark:bg-blue-950/30",
   },
   {
     icon: Zap,
-    title: "Upload Cepat & Mudah",
+    title: "Setup Instan Tanpa DNS",
     description:
-      "Drag & drop file apapun dengan kecepatan tinggi. Mendukung semua format file hingga ukuran 5GB per file.",
+      "Tidak perlu pusing dengan pengaturan DNS, CNAME, atau A Record. Cukup masukkan URL target, dan biarkan sistem kami bekerja.",
     color: "text-yellow-500",
     bg: "bg-yellow-50 dark:bg-yellow-950/30",
   },
   {
     icon: ShieldCheck,
-    title: "Keamanan Tinggi",
+    title: "SSL Otomatis",
     description:
-      "File Anda dilindungi dengan enkripsi end-to-end. Kontrol akses dengan tautan privat atau proteksi password.",
+      "Setiap subdomain yang Anda klaim sudah otomatis dilengkapi dengan sertifikat SSL (HTTPS) gratis selamanya.",
     color: "text-green-500",
     bg: "bg-green-50 dark:bg-green-950/30",
   },
   {
     icon: BarChart3,
-    title: "Analitik Lengkap",
+    title: "Analitik Real-time",
     description:
-      "Pantau performa konten Anda. Ketahui siapa yang mengunduh, kapan, dan dari mana dengan dashboard analitik real-time.",
+      "Pantau performa traffic Anda. Ketahui berapa banyak pengunjung yang mengakses project Anda melalui subdomain Upshare.",
     color: "text-purple-500",
     bg: "bg-purple-50 dark:bg-purple-950/30",
   },
   {
-    icon: Palette,
-    title: "Tampilan Kustom",
+    icon: LinkIcon,
+    title: "Seamless Proxy",
     description:
-      "Sesuaikan tampilan halaman subdomain Anda dengan warna, font, dan tata letak yang mencerminkan brand Anda.",
+      "Pengunjung tidak akan menyadari bahwa mereka diarahkan ke Netlify/Vercel. URL di browser tetap nama subdomain Anda.",
     color: "text-pink-500",
     bg: "bg-pink-50 dark:bg-pink-950/30",
   },
   {
-    icon: LinkIcon,
-    title: "Tautan Pintar",
+    icon: Palette,
+    title: "Satu Akun, Banyak Project",
     description:
-      "Buat tautan pendek yang mudah diingat. Bagikan ke media sosial, email, atau kartu nama digital Anda.",
+      "Punya banyak project? Kelola berbagai subdomain dan arahkan ke berbagai platform berbeda hanya dari satu dashboard.",
     color: "text-cyan-500",
     bg: "bg-cyan-50 dark:bg-cyan-950/30",
   },

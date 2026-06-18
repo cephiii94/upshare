@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const highlights = [
-  "Subdomain kustom gratis",
+  "Subdomain kustom premium",
   "Setup dalam 2 menit",
-  "Tanpa batas upload",
+  "Arahkan ke Netlify & Vercel",
 ];
 
 export function HeroSection() {
@@ -29,21 +29,20 @@ export function HeroSection() {
             className="mb-6 gap-1.5 px-4 py-1.5 text-sm font-medium border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Platform berbagi file #1 di Indonesia
+            Platform Subdomain Proxy #1 di Indonesia
           </Badge>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
-            Bagikan File Anda{" "}
-            <span className="text-gradient-brand">Secara Profesional</span>
+            Pusatkan Project Anda di{" "}
+            <span className="text-gradient-brand">Satu Subdomain</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-8 leading-relaxed">
-            Buat subdomain kustom Anda sendiri di{" "}
+            Klaim subdomain kustom premium di{" "}
             <span className="font-semibold text-foreground">upshare.id</span>{" "}
-            dan mulai berbagi file, portofolio, atau konten digital dengan tampilan
-            yang elegan dan profesional.
+            dan arahkan secara instan ke website Anda yang di-hosting di Netlify, Vercel, atau Github Pages.
           </p>
 
           {/* Highlights */}
@@ -67,7 +66,7 @@ export function HeroSection() {
               asChild
             >
               <Link href="/register">
-                Mulai Gratis Sekarang
+                Klaim Subdomain Sekarang
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
@@ -85,7 +84,7 @@ export function HeroSection() {
           <p className="mt-10 text-sm text-muted-foreground">
             Dipercaya oleh{" "}
             <span className="font-semibold text-foreground">5.000+</span>{" "}
-            pengguna aktif di seluruh Indonesia
+            developer aktif di seluruh Indonesia
           </p>
         </div>
 
@@ -102,24 +101,17 @@ export function HeroSection() {
               <div className="flex-1 mx-4">
                 <div className="bg-background rounded-md px-3 py-1 text-xs text-muted-foreground flex items-center gap-2 max-w-xs mx-auto">
                   <span className="w-3 h-3 text-green-500">🔒</span>
-                  nama-anda.upshare.id
+                  cecep.upshare.id
                 </div>
               </div>
             </div>
             {/* Mock Content */}
             <div className="p-8 bg-gradient-to-br from-background to-secondary/20 min-h-[240px] flex items-center justify-center">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-2xl gradient-brand mx-auto mb-4 flex items-center justify-center shadow-lg">
-                  <span className="text-white text-2xl font-bold">A</span>
-                </div>
-                <h2 className="text-xl font-bold text-foreground mb-1">Ahmad Firmansyah</h2>
-                <p className="text-sm text-muted-foreground mb-4">UI/UX Designer · ahmaddev.upshare.id</p>
-                <div className="flex gap-3 justify-center flex-wrap">
-                  {["Portofolio 2024.pdf", "CV Terbaru.pdf", "Design Kit.zip"].map((f) => (
-                    <div key={f} className="flex items-center gap-2 bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full border border-primary/20">
-                      <span>📄</span> {f}
-                    </div>
-                  ))}
+                <div className="inline-flex items-center gap-4 bg-background px-6 py-3 rounded-full shadow-lg border border-border/50">
+                  <span className="text-foreground font-semibold">cecep.upshare.id</span>
+                  <ArrowRight className="text-primary w-5 h-5" />
+                  <span className="text-muted-foreground font-mono text-sm">cecep-project.netlify.app</span>
                 </div>
               </div>
             </div>
@@ -129,3 +121,4 @@ export function HeroSection() {
     </section>
   );
 }
+

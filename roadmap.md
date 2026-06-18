@@ -10,7 +10,7 @@ Dokumen ini berisi daftar pencapaian (progress) dan rencana pengembangan platfor
 graph TD
     Phase1[Fase 1: Fondasi & UI Marketing] -->|Selesai| Phase2[Fase 2: Otentikasi & Database]
     Phase2 -->|Selesai| Phase3[Fase 3: Multi-tenant Routing]
-    Phase3 -->|Akan Datang| Phase4[Fase 4: Integrasi Pembayaran & Email]
+    Phase3 -->|Selesai| Phase4[Fase 4: Integrasi Pembayaran & Email]
     Phase4 -->|Akan Datang| Phase5[Fase 5: Dashboard & Zustand Store]
 ```
 
@@ -54,29 +54,29 @@ Fokus pada pembuatan klien integrasi database, schema SQL, serta halaman login &
 
 ---
 
-## 🔄 Fase 3: Multi-tenant Routing & Subdomain (Sedang Berjalan)
+## ✅ Fase 3: Multi-tenant Routing & Subdomain (Selesai)
 Fokus pada implementasi dynamic routing menggunakan Next.js Middleware agar setiap user memiliki subdomain personal mereka sendiri.
 
-*   [ ] Pembuatan `src/middleware.ts` untuk deteksi subdomain (misal: `cecep.upshare.id` atau `localhost:3000` dengan subdomain).
-*   [ ] Pemetaan subdomain dinamis dari middleware menuju halaman internal `src/app/[subdomain]/page.tsx`.
-*   [ ] Validasi subdomain aktif dari database Supabase sebelum menyajikan halaman personal tenant.
-*   [ ] Penanganan pengecualian untuk subdomain default/sistem (seperti `www`, `app`, `api`).
+*   [x] Pembuatan `src/proxy.ts` untuk deteksi subdomain (misal: `cecep.upshare.id` atau `localhost:3000` dengan subdomain).
+*   [x] Pemetaan subdomain dinamis dari proxy menuju halaman internal `src/app/[subdomain]/page.tsx`.
+*   [x] Validasi subdomain aktif dari database Supabase sebelum menyajikan halaman personal tenant.
+*   [x] Penanganan pengecualian untuk subdomain default/sistem (seperti `www`, `app`, `api`).
 
 ---
 
-## ⏳ Fase 4: Integrasi Pembayaran (Mayar.id) & Email Transaksional (Resend) (Akan Datang)
+## ✅ Fase 4: Integrasi Pembayaran (Mayar.id) & Email Transaksional (Resend) (Selesai)
 Fokus pada monetisasi platform dan notifikasi email setelah transaksi atau registrasi berhasil.
 
-*   [ ] Integrasi Checkout API Mayar.id untuk pembayaran paket subscription (Pro/Enterprise).
-*   [ ] Pembuatan API Route Webhook Mayar untuk menerima konfirmasi pembayaran dan memperbarui status tabel `subscriptions` di Supabase secara real-time.
-*   [ ] Integrasi Resend Email untuk pengiriman email transaksi otomatis (kwitansi pembayaran & konfirmasi akun).
+*   [x] Integrasi Checkout API Mayar.id untuk pembayaran paket subscription (Pro/Enterprise).
+*   [x] Pembuatan API Route Webhook Mayar untuk menerima konfirmasi pembayaran dan memperbarui status tabel `subscriptions` di Supabase secara real-time.
+*   [x] Integrasi Resend Email untuk pengiriman email transaksi otomatis (kwitansi pembayaran & konfirmasi akun).
 
 ---
 
-## ⏳ Fase 5: Dashboard Panel & Zustand State Management (Akan Datang)
-Fokus pada halaman aplikasi internal (Dashboard) tempat user mengunggah file, mengelola link sharing, dan melihat analitik.
+## ⏳ Fase 5: Dashboard & Sistem Proxy Subdomain (Sedang Berjalan)
+Fokus pada halaman aplikasi internal (Dashboard) tempat user mengatur URL target dan implementasi Reverse Proxy di Middleware.
 
-*   [ ] Pembuatan UI Dashboard yang modern (Sidebar navigation, file upload area, list files, download manager).
-*   [ ] Konfigurasi Zustand Store untuk global state management (misal: tracking progress upload file, sorting/filtering file).
-*   [ ] Integrasi Supabase Storage untuk meng-upload file secara aman serta menghasilkan link unduhan unik untuk dibagikan.
-*   [ ] Halaman publik unduhan file bagi penerima link.
+*   [ ] Pembaruan skema `tenants` di Supabase untuk menyimpan `target_url`.
+*   [ ] Pembuatan UI Dashboard yang modern (Sidebar navigation, Overview, Settings).
+*   [ ] Form manajemen URL Target di Dashboard untuk menyambungkan subdomain ke Netlify/Vercel.
+*   [ ] Integrasi Reverse Proxy (Rewrite) di `src/middleware.ts` untuk memproses `target_url` secara otomatis.
