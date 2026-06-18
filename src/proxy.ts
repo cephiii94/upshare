@@ -16,7 +16,7 @@ export const config = {
 
 import { createClient } from "@supabase/supabase-js";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. cecep.upshare.id, cecep.localhost:3000)
