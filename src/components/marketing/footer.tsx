@@ -67,7 +67,7 @@ export function MarketingFooter() {
           <div className="col-span-2 md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4 group w-fit">
               <div className="flex items-center justify-center w-8 h-8 rounded-lg group-hover:scale-105 transition-transform duration-200 overflow-hidden">
-                <Image src="/logo.png" alt="Upshare Logo" width={32} height={32} className="w-full h-full object-cover" />
+                <Image src="/logo-v2.png" alt="Upshare Logo" width={32} height={32} className="w-full h-full object-cover" />
               </div>
               <span className="text-xl font-bold text-foreground">
                 Up<span className="text-gradient-brand">share</span>
