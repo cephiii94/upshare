@@ -19,9 +19,9 @@ export default function NotFound() {
         </div>
         <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
           <Button asChild>
-            <Link href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}>
+            <a href={process.env.NEXT_PUBLIC_APP_URL || "https://upshare.id"}>
               Kembali ke Beranda
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

@@ -45,9 +45,14 @@ export function TargetUrlForm({ initialUrl, subdomain }: TargetUrlFormProps) {
       <form ref={formRef} action={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-3 bg-muted/50 p-4 rounded-lg border">
-            <span className="font-semibold text-foreground truncate max-w-[200px]">
-              {subdomain}.upshare.id
-            </span>
+            <a 
+              href={`https://${subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || "upshare.id"}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-primary hover:underline truncate max-w-[200px]"
+            >
+              {subdomain}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN || "upshare.id"}
+            </a>
             <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
             <div className="flex-1">
               <div className="relative">
