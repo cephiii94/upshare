@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default async function AdminUsersPage() {
-  const supabase = await createClient();
+  const supabase = getSupabaseAdmin();
 
   // Ambil data users dengan join ke subscriptions dan tenants jika memungkinkan.
   // Karena struktur kita, kita bisa ambil dari profiles lalu manual join, atau pakai View.

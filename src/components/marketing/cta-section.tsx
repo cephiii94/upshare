@@ -1,10 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/use-user";
 
 export function CTASection() {
+  const [mounted, setMounted] = useState(false);
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section className="py-20 sm:py-28 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,24 +40,41 @@ export function CTASection() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
-                asChild
-              >
-                <Link href="/register">
-                  Buat Akun Gratis
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="ghost"
-                className="text-white hover:bg-white/10 border border-white/30 px-8 h-12 text-base"
-                asChild
-              >
-                <Link href="/login">Sudah punya akun? Masuk</Link>
-              </Button>
+              {!mounted || loading ? (
+                <div className="w-48 h-12 bg-white/10 animate-pulse rounded-lg" />
+              ) : user ? (
+                <Button
+                  size="lg"
+                  className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
+                  asChild
+                >
+                  <Link href="/dashboard">
+                    Ke Dashboard
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
+                    asChild
+                  >
+                    <Link href="/register">
+                      Buat Akun Gratis
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="ghost"
+                    className="text-white hover:bg-white/10 border border-white/30 px-8 h-12 text-base"
+                    asChild
+                  >
+                    <Link href="/login">Sudah punya akun? Masuk</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

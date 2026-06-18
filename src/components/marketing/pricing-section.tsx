@@ -42,7 +42,8 @@ const plans = [
       { text: "Multi-target proxy", included: true },
       { text: "Prioritas support", included: false },
     ],
-    cta: "Mulai Pro",
+    cta: "Segera Hadir",
+    disabled: true,
     ctaVariant: "default" as const,
     href: "/register?plan=pro",
   },
@@ -61,7 +62,8 @@ const plans = [
       { text: "Multi-target proxy", included: true },
       { text: "Prioritas support 24/7", included: true },
     ],
-    cta: "Mulai Business",
+    cta: "Segera Hadir",
+    disabled: true,
     ctaVariant: "outline" as const,
     href: "/register?plan=business",
   },
@@ -154,10 +156,14 @@ export function PricingSection() {
 
               {/* CTA */}
               {plan.id ? (
-                <form action={createCheckoutSession} className="w-full">
+                <form action={async (formData) => {
+                  const res = await createCheckoutSession(formData);
+                  if (res && !res.success) alert(res.error);
+                }} className="w-full">
                   <input type="hidden" name="planId" value={plan.id} />
                   <Button
                     type="submit"
+                    disabled={plan.disabled}
                     variant={plan.badge ? "default" : plan.ctaVariant}
                     className={
                       plan.badge

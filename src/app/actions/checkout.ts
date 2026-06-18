@@ -3,12 +3,13 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createPaymentLink } from "@/lib/mayar/client";
+import { safeAction } from "@/lib/safe-action";
 
-export async function createCheckoutSession(formData: FormData) {
+export const createCheckoutSession = safeAction(async (formData: FormData) => {
   const planId = formData.get("planId") as "pro" | "business";
   
   if (!planId || !["pro", "business"].includes(planId)) {
-    throw new Error("Plan tidak valid");
+    return { success: false, error: "Plan langganan tidak valid" };
   }
 
   const supabase = await createClient();
@@ -55,9 +56,10 @@ export async function createCheckoutSession(formData: FormData) {
   });
 
   if (!paymentUrl) {
-    throw new Error("Gagal membuat sesi pembayaran. Silakan coba lagi nanti.");
+    return { success: false, error: "Gagal membuat sesi pembayaran. Silakan coba lagi nanti." };
   }
 
   // Redirect user ke halaman checkout Mayar
+  // Redirect ini akan melempar 'NEXT_REDIRECT' yang akan dilewatkan dengan aman oleh safeAction
   redirect(paymentUrl);
-}
+});

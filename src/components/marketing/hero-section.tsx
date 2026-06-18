@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useUser } from "@/hooks/use-user";
 
 const highlights = [
   "Subdomain kustom premium",
@@ -12,6 +14,13 @@ const highlights = [
 ];
 
 export function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section className="relative overflow-hidden gradient-hero py-20 sm:py-28 lg:py-36">
       {/* Background decoration */}
@@ -60,16 +69,31 @@ export function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <Button
-              size="lg"
-              className="gradient-brand text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
-              asChild
-            >
-              <Link href="/register">
-                Klaim Subdomain Sekarang
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
+            {!mounted || loading ? (
+              <div className="w-48 h-12 bg-muted/30 animate-pulse rounded-lg" />
+            ) : user ? (
+              <Button
+                size="lg"
+                className="gradient-brand text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                asChild
+              >
+                <Link href="/dashboard">
+                  Ke Dashboard
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="gradient-brand text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                asChild
+              >
+                <Link href="/register">
+                  Klaim Subdomain Sekarang
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+            )}
             <Button
               size="lg"
               variant="outline"

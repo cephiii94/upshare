@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/use-user";
 
 const navLinks = [
   { label: "Fitur", href: "#features" },
@@ -13,6 +14,12 @@ const navLinks = [
 
 export function MarketingNavbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full glass border-b border-border/50">
@@ -43,12 +50,22 @@ export function MarketingNavbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Masuk</Link>
-            </Button>
-            <Button size="sm" className="gradient-brand text-white border-0 shadow-md hover:opacity-90 hover:scale-105 transition-all duration-200" asChild>
-              <Link href="/register">Mulai Gratis</Link>
-            </Button>
+            {!mounted || loading ? (
+              <div className="w-32 h-9 bg-muted/30 animate-pulse rounded-lg" />
+            ) : user ? (
+              <Button size="sm" className="gradient-brand text-white border-0 shadow-md hover:opacity-90 hover:scale-105 transition-all duration-200" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Masuk</Link>
+                </Button>
+                <Button size="sm" className="gradient-brand text-white border-0 shadow-md hover:opacity-90 hover:scale-105 transition-all duration-200" asChild>
+                  <Link href="/register">Mulai Gratis</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -75,12 +92,22 @@ export function MarketingNavbar() {
               </Link>
             ))}
             <div className="pt-3 flex flex-col gap-2 px-1">
-              <Button variant="outline" asChild className="w-full">
-                <Link href="/login">Masuk</Link>
-              </Button>
-              <Button className="gradient-brand text-white border-0 w-full" asChild>
-                <Link href="/register">Mulai Gratis</Link>
-              </Button>
+              {!mounted || loading ? (
+                <div className="w-full h-9 bg-muted/30 animate-pulse rounded-lg" />
+              ) : user ? (
+                <Button className="gradient-brand text-white border-0 w-full" asChild>
+                  <Link href="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" asChild className="w-full">
+                    <Link href="/login" onClick={() => setIsOpen(false)}>Masuk</Link>
+                  </Button>
+                  <Button className="gradient-brand text-white border-0 w-full" asChild>
+                    <Link href="/register" onClick={() => setIsOpen(false)}>Mulai Gratis</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}

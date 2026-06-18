@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default async function AdminSubdomainsPage() {
-  const supabase = await createClient();
+  const supabase = getSupabaseAdmin();
 
   const { data: tenants } = await supabase
     .from("tenants")

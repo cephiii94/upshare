@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
+import { authRateLimit } from "@/lib/ratelimit";
 
 // ── Schemas ────────────────────────────────────────────────────────────────
 const LoginSchema = z.object({
@@ -46,6 +48,12 @@ export async function loginAction(
   _state: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+  const { success: rateLimitSuccess } = await authRateLimit.limit(ip);
+  if (!rateLimitSuccess) {
+    return { message: "Terlalu banyak percobaan login. Silakan coba beberapa saat lagi." };
+  }
+
   const validated = LoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -79,6 +87,12 @@ export async function registerAction(
   _state: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+  const { success: rateLimitSuccess } = await authRateLimit.limit(ip);
+  if (!rateLimitSuccess) {
+    return { message: "Terlalu banyak percobaan pendaftaran. Silakan coba beberapa saat lagi." };
+  }
+
   const validated = RegisterSchema.safeParse({
     full_name: formData.get("full_name"),
     email: formData.get("email"),
