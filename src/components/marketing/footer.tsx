@@ -31,10 +31,10 @@ import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
   Produk: [
-    { label: "Fitur", href: "#features" },
-    { label: "Harga", href: "#pricing" },
-    { label: "Changelog", href: "/changelog" },
-    { label: "Roadmap", href: "/roadmap" },
+    { label: "Upshare Proxy", href: "/" },
+    { label: "Upshare Undangan", href: "/undangan-premium" },
+    { label: "Fitur Umum", href: "/#features" },
+    { label: "Harga", href: "/#pricing" },
   ],
   Perusahaan: [
     { label: "Tentang Kami", href: "/about" },

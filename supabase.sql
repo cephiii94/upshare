@@ -71,15 +71,16 @@ CREATE TABLE IF NOT EXISTS public.tenants (
   bio           TEXT,
   avatar_url    TEXT,
   is_active     BOOLEAN NOT NULL DEFAULT false,
+  category      TEXT NOT NULL DEFAULT 'universal',
+  template_data JSONB,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
 
   -- Validasi subdomain: lowercase, hanya huruf/angka/strip, 3-30 karakter
   CONSTRAINT subdomain_format CHECK (
     subdomain ~ '^[a-z0-9][a-z0-9\-]{1,28}[a-z0-9]$'
-  ),
-  -- Satu user hanya boleh punya satu subdomain (untuk paket Free/Pro)
-  CONSTRAINT unique_user_subdomain UNIQUE (user_id)
+  )
+  -- CONSTRAINT unique_user_subdomain UNIQUE (user_id) -- (Dihapus karena sekarang Pro/Admin bisa punya banyak)
 );
 
 COMMENT ON TABLE public.tenants IS 'Data subdomain milik setiap pengguna';
@@ -210,7 +211,10 @@ RETURNS TABLE (
   bio           TEXT,
   avatar_url    TEXT,
   is_active     BOOLEAN,
+  category      TEXT,
+  template_data JSONB,
   full_name     TEXT,
+  is_admin      BOOLEAN,
   plan          public.subscription_plan,
   sub_status    public.subscription_status
 )
@@ -227,7 +231,10 @@ BEGIN
     t.bio,
     COALESCE(t.avatar_url, p.avatar_url),
     t.is_active,
+    t.category,
+    t.template_data,
     p.full_name,
+    p.is_admin,
     s.plan,
     s.status
   FROM public.tenants t

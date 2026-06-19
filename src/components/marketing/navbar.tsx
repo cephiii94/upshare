@@ -38,6 +38,16 @@ export function MarketingNavbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
+            <div className="relative group">
+              <button className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent transition-all duration-200 flex items-center gap-1">
+                Produk
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div className="absolute top-full left-0 mt-0 w-48 bg-background border border-border/50 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2">
+                <Link href="/" className="block px-4 py-2.5 text-sm hover:bg-accent text-foreground font-medium">Upshare Proxy</Link>
+                <Link href="/undangan-premium" className="block px-4 py-2.5 text-sm hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 font-medium">Upshare Undangan</Link>
+              </div>
+            </div>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -82,6 +92,22 @@ export function MarketingNavbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden border-t border-border/50 py-4 space-y-1">
+            <div className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Produk</div>
+            <Link
+              href="/"
+              className="block px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent rounded-lg transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              Upshare Proxy
+            </Link>
+            <Link
+              href="/undangan-premium"
+              className="block px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              Upshare Undangan
+            </Link>
+            <div className="px-4 py-2 mt-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Lainnya</div>
             {navLinks.map((link) => (
               <Link
                 key={link.href}

@@ -15,11 +15,14 @@ export default async function DashboardPage() {
 
   if (!user) return null;
 
-  const { data: tenant } = await supabase
+  const { data: latestTenants } = await supabase
     .from("tenants")
     .select("*")
     .eq("user_id", user.id)
-    .single();
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  const tenant = latestTenants?.[0] || null;
 
   const { data: subscription } = await supabase
     .from("subscriptions")
@@ -27,7 +30,25 @@ export default async function DashboardPage() {
     .eq("user_id", user.id)
     .single();
 
-  const isPro = subscription?.status === "active";
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single();
+
+  const isAdmin = profile?.is_admin || false;
+  const isPro = subscription?.status === "active" || isAdmin;
+  const planDisplay = isAdmin ? "Admin (Unlimited)" : (subscription?.plan || "Gratis");
+  const badgeDisplay = isAdmin ? "Admin" : (isPro ? "Active" : "Free");
+
+  // Fetch all tenants to count subdomains
+  const { data: allTenants } = await supabase
+    .from("tenants")
+    .select("id")
+    .eq("user_id", user.id);
+  
+  const subdomainsCount = allTenants?.length || 0;
+
   const userGreetingName = user.email?.split("@")[0] || "User";
 
   return (
@@ -38,6 +59,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
             Selamat datang, <span className="capitalize">{userGreetingName}</span> 👋
+            {isAdmin && <Badge variant="destructive" className="ml-2">Admin</Badge>}
           </h1>
           <p className="text-muted-foreground mt-2 flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
@@ -47,21 +69,12 @@ export default async function DashboardPage() {
             All systems operational. Kelola subdomain proxy Anda di sini.
           </p>
         </div>
-        {tenant ? (
-          <Button asChild className="gradient-brand text-white shadow-md hover:shadow-lg transition-all hover:scale-105">
-            <Link href="/dashboard/subdomains">
-              <Globe className="mr-2 h-4 w-4" />
-              Kelola Subdomain
-            </Link>
-          </Button>
-        ) : (
-          <Button asChild className="gradient-brand text-white shadow-md hover:shadow-lg transition-all hover:scale-105">
-            <Link href="/dashboard/subdomains">
-              <Zap className="mr-2 h-4 w-4" />
-              Klaim Subdomain
-            </Link>
-          </Button>
-        )}
+        <Button asChild className="gradient-brand text-white shadow-md hover:shadow-lg transition-all hover:scale-105">
+          <Link href="/dashboard/subdomains">
+            <Globe className="mr-2 h-4 w-4" />
+            {subdomainsCount > 0 ? "Kelola Subdomain" : "Klaim Subdomain"}
+          </Link>
+        </Button>
       </div>
 
       {/* Metrics Cards Grid */}
@@ -73,15 +86,15 @@ export default async function DashboardPage() {
           <CardHeader className="pb-2">
             <CardDescription className="font-medium">Status Paket</CardDescription>
             <CardTitle className="text-2xl flex items-center gap-2">
-              {subscription?.plan || "Gratis"}
+              <span className="capitalize">{planDisplay}</span>
               <Badge variant={isPro ? "default" : "secondary"} className="ml-auto">
-                {isPro ? "Active" : "Free"}
+                {badgeDisplay}
               </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground">
-              {isPro ? "Anda menikmati fitur premium." : "Upgrade untuk fitur lebih banyak."}
+              {isAdmin ? "Admin bebas batasan kuota." : (isPro ? "Anda menikmati fitur premium." : "Upgrade untuk fitur lebih banyak.")}
             </p>
           </CardContent>
         </Card>
@@ -93,12 +106,12 @@ export default async function DashboardPage() {
           <CardHeader className="pb-2">
             <CardDescription className="font-medium">Subdomain Aktif</CardDescription>
             <CardTitle className="text-2xl flex items-center gap-2">
-              {tenant ? "1" : "0"} <span className="text-muted-foreground text-sm font-normal">/ 1 Kuota</span>
+              {subdomainsCount} <span className="text-muted-foreground text-sm font-normal">/ {isAdmin ? "∞ Kuota" : "1 Kuota"}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground">
-              Satu subdomain per akun saat ini.
+              {isAdmin ? "Anda bisa membuat banyak subdomain." : "Satu subdomain per akun saat ini."}
             </p>
           </CardContent>
         </Card>
@@ -122,96 +135,96 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* Main Core Asset: Proxy Visualizer */}
-      {tenant ? (
-        <Card className="border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
-          <div className="h-1.5 w-full gradient-brand" />
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary" />
-                Subdomain Utama Anda
-              </span>
-              <Badge variant={tenant.is_active ? "default" : "destructive"}>
-                {tenant.is_active ? "Aktif" : "Menunggu Pembayaran"}
-              </Badge>
-            </CardTitle>
-            <CardDescription>
-              Detail rute proxy (forwarding) dari subdomain Upshare ke hosting Anda.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="bg-muted/30 rounded-xl p-6 border border-border/50 mt-2">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                
-                {/* Source Subdomain */}
-                <div className="flex-1 w-full flex flex-col items-center md:items-start">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-1.5">
-                    <Globe className="h-3.5 w-3.5" />
-                    URL Anda (Public)
+      {/* Main Core Asset: Proxy Visualizer List */}
+      {latestTenants && latestTenants.length > 0 ? (
+        <div className="space-y-6">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <Activity className="h-5 w-5 text-primary" />
+            Rute Subdomain Anda
+          </h2>
+          {latestTenants.map((t) => (
+            <Card key={t.id} className="border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
+              <div className="h-1.5 w-full gradient-brand" />
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center justify-between text-lg">
+                  <span className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-primary" />
+                    {t.subdomain}.upshare.id
                   </span>
-                  <div className="bg-background border shadow-sm rounded-lg py-3 px-4 w-full flex items-center justify-between">
-                    <span className="font-mono text-sm font-semibold truncate text-primary">
-                      {tenant.subdomain}.upshare.id
-                    </span>
-                    <div className="flex items-center gap-1 ml-2">
-                      <CopyButton textToCopy={`https://${tenant.subdomain}.upshare.id`} />
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
-                        <a href={`https://${tenant.subdomain}.upshare.id`} target="_blank" rel="noreferrer" title="Buka URL">
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Arrow Visualizer */}
-                <div className="hidden md:flex flex-col items-center justify-center shrink-0 mt-6 text-muted-foreground">
-                  <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full mb-1">PROXY</div>
-                  <ArrowRight className="h-6 w-6" />
-                </div>
-                <div className="flex md:hidden items-center justify-center text-muted-foreground">
-                  <ArrowRight className="h-5 w-5 rotate-90" />
-                </div>
-
-                {/* Target Host */}
-                <div className="flex-1 w-full flex flex-col items-center md:items-start">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-1.5">
-                    <Activity className="h-3.5 w-3.5" />
-                    Target Hosting (Private)
-                  </span>
-                  <div className="bg-background border shadow-sm rounded-lg py-3 px-4 w-full flex items-center justify-between">
-                    {tenant.target_url ? (
-                      <>
-                        <span className="font-mono text-sm truncate text-foreground/80">
-                          {tenant.target_url}
+                  <Badge variant={t.is_active ? "default" : "destructive"}>
+                    {t.is_active ? "Aktif" : "Menunggu Pembayaran"}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    
+                    {/* Source Subdomain */}
+                    <div className="flex-1 w-full flex flex-col items-center md:items-start">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                        <Globe className="h-3 w-3" />
+                        URL Publik
+                      </span>
+                      <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
+                        <span className="font-mono text-sm font-semibold truncate text-primary">
+                          {t.subdomain}.upshare.id
                         </span>
                         <div className="flex items-center gap-1 ml-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
-                            <a href={tenant.target_url} target="_blank" rel="noreferrer" title="Buka Target">
-                              <ExternalLink className="h-4 w-4" />
+                          <CopyButton textToCopy={`https://${t.subdomain}.upshare.id`} />
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
+                            <a href={`https://${t.subdomain}.upshare.id`} target="_blank" rel="noreferrer" title="Buka URL">
+                              <ExternalLink className="h-3.5 w-3.5" />
                             </a>
                           </Button>
                         </div>
-                      </>
-                    ) : (
-                      <span className="text-sm italic text-muted-foreground py-1">Belum diatur</span>
-                    )}
+                      </div>
+                    </div>
+
+                    {/* Arrow Visualizer */}
+                    <div className="hidden md:flex flex-col items-center justify-center shrink-0 mt-4 text-muted-foreground">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                    <div className="flex md:hidden items-center justify-center text-muted-foreground py-2">
+                      <ArrowRight className="h-4 w-4 rotate-90" />
+                    </div>
+
+                    {/* Target Host */}
+                    <div className="flex-1 w-full flex flex-col items-center md:items-start">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                        <Activity className="h-3 w-3" />
+                        Target / Mode
+                      </span>
+                      <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
+                        {t.target_url ? (
+                          <>
+                            <span className="font-mono text-xs truncate text-foreground/80">
+                              {t.target_url}
+                            </span>
+                            <div className="flex items-center gap-1 ml-2">
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
+                                <a href={t.target_url} target="_blank" rel="noreferrer" title="Buka Target">
+                                  <ExternalLink className="h-3.5 w-3.5" />
+                                </a>
+                              </Button>
+                            </div>
+                          </>
+                        ) : t.category === "undangan" && t.template_data ? (
+                          <span className="text-xs font-semibold text-rose-600 flex items-center gap-1.5 py-1">
+                            <Activity className="w-3.5 h-3.5" /> Template Internal ({t.template_data.theme || "Bawaan"})
+                          </span>
+                        ) : (
+                          <span className="text-xs italic text-muted-foreground py-1">Belum diatur</span>
+                        )}
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-
-              </div>
-              
-              {!tenant.target_url && (
-                <div className="mt-6 text-center">
-                  <Button asChild variant="outline" size="sm" className="border-dashed border-primary/50 text-primary hover:bg-primary/5">
-                    <Link href="/dashboard/subdomains">Atur Target URL Sekarang</Link>
-                  </Button>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       ) : (
         <Card className="border-dashed border-2 border-border/60 bg-muted/10">
           <CardHeader className="text-center pb-2">
