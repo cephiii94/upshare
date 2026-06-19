@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Globe, Zap, Activity, ArrowRight, ExternalLink, ShieldCheck, HelpCircle } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import { CopyButton } from "@/components/dashboard/copy-button";
 
@@ -137,94 +138,107 @@ export default async function DashboardPage() {
 
       {/* Main Core Asset: Proxy Visualizer List */}
       {latestTenants && latestTenants.length > 0 ? (
-        <div className="space-y-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <Activity className="h-5 w-5 text-primary" />
-            Rute Subdomain Anda
-          </h2>
-          {latestTenants.map((t) => (
-            <Card key={t.id} className="border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
-              <div className="h-1.5 w-full gradient-brand" />
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center justify-between text-lg">
-                  <span className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-primary" />
-                    {t.subdomain}.upshare.id
-                  </span>
-                  <Badge variant={t.is_active ? "default" : "destructive"}>
-                    {t.is_active ? "Aktif" : "Menunggu Pembayaran"}
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    
-                    {/* Source Subdomain */}
-                    <div className="flex-1 w-full flex flex-col items-center md:items-start">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
-                        <Globe className="h-3 w-3" />
-                        URL Publik
+        <Card className="border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
+          <div className="h-1.5 w-full gradient-brand" />
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary" />
+              Rute Subdomain Terbaru Anda
+            </CardTitle>
+            <CardDescription>
+              Klik pada salah satu subdomain untuk melihat detail rute (proxy) atau template yang digunakan.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full border rounded-xl overflow-hidden">
+              {latestTenants.map((t, index) => (
+                <AccordionItem 
+                  key={t.id} 
+                  value={t.id} 
+                  className={`px-4 ${index !== latestTenants.length - 1 ? "border-b" : "border-b-0"}`}
+                >
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center justify-between w-full pr-4">
+                      <span className="flex items-center gap-2 font-mono text-base text-primary">
+                        <Globe className="h-4 w-4 text-muted-foreground" />
+                        {t.subdomain}.upshare.id
                       </span>
-                      <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
-                        <span className="font-mono text-sm font-semibold truncate text-primary">
-                          {t.subdomain}.upshare.id
-                        </span>
-                        <div className="flex items-center gap-1 ml-2">
-                          <CopyButton textToCopy={`https://${t.subdomain}.upshare.id`} />
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
-                            <a href={`https://${t.subdomain}.upshare.id`} target="_blank" rel="noreferrer" title="Buka URL">
-                              <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
-                          </Button>
-                        </div>
-                      </div>
+                      <Badge variant={t.is_active ? "default" : "destructive"}>
+                        {t.is_active ? "Aktif" : "Menunggu Pembayaran"}
+                      </Badge>
                     </div>
-
-                    {/* Arrow Visualizer */}
-                    <div className="hidden md:flex flex-col items-center justify-center shrink-0 mt-4 text-muted-foreground">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                    <div className="flex md:hidden items-center justify-center text-muted-foreground py-2">
-                      <ArrowRight className="h-4 w-4 rotate-90" />
-                    </div>
-
-                    {/* Target Host */}
-                    <div className="flex-1 w-full flex flex-col items-center md:items-start">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
-                        <Activity className="h-3 w-3" />
-                        Target / Mode
-                      </span>
-                      <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
-                        {t.target_url ? (
-                          <>
-                            <span className="font-mono text-xs truncate text-foreground/80">
-                              {t.target_url}
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-4 pt-1">
+                    <div className="bg-muted/30 rounded-lg p-4 border border-border/50">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        
+                        {/* Source Subdomain */}
+                        <div className="flex-1 w-full flex flex-col items-center md:items-start">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                            <Globe className="h-3 w-3" />
+                            URL Publik
+                          </span>
+                          <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
+                            <span className="font-mono text-sm font-semibold truncate text-primary">
+                              {t.subdomain}.upshare.id
                             </span>
                             <div className="flex items-center gap-1 ml-2">
+                              <CopyButton textToCopy={`https://${t.subdomain}.upshare.id`} />
                               <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
-                                <a href={t.target_url} target="_blank" rel="noreferrer" title="Buka Target">
+                                <a href={`https://${t.subdomain}.upshare.id`} target="_blank" rel="noreferrer" title="Buka URL">
                                   <ExternalLink className="h-3.5 w-3.5" />
                                 </a>
                               </Button>
                             </div>
-                          </>
-                        ) : t.category === "undangan" && t.template_data ? (
-                          <span className="text-xs font-semibold text-rose-600 flex items-center gap-1.5 py-1">
-                            <Activity className="w-3.5 h-3.5" /> Template Internal ({t.template_data.theme || "Bawaan"})
+                          </div>
+                        </div>
+
+                        {/* Arrow Visualizer */}
+                        <div className="hidden md:flex flex-col items-center justify-center shrink-0 mt-4 text-muted-foreground">
+                          <ArrowRight className="h-5 w-5" />
+                        </div>
+                        <div className="flex md:hidden items-center justify-center text-muted-foreground py-2">
+                          <ArrowRight className="h-4 w-4 rotate-90" />
+                        </div>
+
+                        {/* Target Host */}
+                        <div className="flex-1 w-full flex flex-col items-center md:items-start">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
+                            <Activity className="h-3 w-3" />
+                            Target / Mode
                           </span>
-                        ) : (
-                          <span className="text-xs italic text-muted-foreground py-1">Belum diatur</span>
-                        )}
+                          <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
+                            {t.target_url ? (
+                              <>
+                                <span className="font-mono text-xs truncate text-foreground/80">
+                                  {t.target_url}
+                                </span>
+                                <div className="flex items-center gap-1 ml-2">
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
+                                    <a href={t.target_url} target="_blank" rel="noreferrer" title="Buka Target">
+                                      <ExternalLink className="h-3.5 w-3.5" />
+                                    </a>
+                                  </Button>
+                                </div>
+                              </>
+                            ) : t.category === "undangan" && t.template_data ? (
+                              <span className="text-xs font-semibold text-rose-600 flex items-center gap-1.5 py-1">
+                                <Activity className="w-3.5 h-3.5" /> Template ({t.template_data.theme || "Bawaan"})
+                              </span>
+                            ) : (
+                              <span className="text-xs italic text-muted-foreground py-1">Belum diatur</span>
+                            )}
+                          </div>
+                        </div>
+
                       </div>
                     </div>
-
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
       ) : (
         <Card className="border-dashed border-2 border-border/60 bg-muted/10">
           <CardHeader className="text-center pb-2">
