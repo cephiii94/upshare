@@ -84,92 +84,20 @@ export function TenantSettingsForm({ tenant }: { tenant: any }) {
             )}
 
             {category === "undangan" && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 flex flex-col items-center justify-center py-8 text-center bg-white rounded-xl border border-rose-100">
+                <div className="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center mb-2">
+                  <Heart className="w-8 h-8 text-rose-500 animate-pulse" />
+                </div>
                 <div>
-                  <h4 className="font-semibold text-base mb-4 flex items-center gap-2">
-                    <LayoutTemplate className="w-4 h-4 text-rose-500" /> Ubah Desain Template
-                  </h4>
-                  <RadioGroup 
-                    value={templateData.theme} 
-                    onValueChange={(val) => setTemplateData({...templateData, theme: val})}
-                    className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6"
-                  >
-                    {/* Template 1 */}
-                    <div>
-                      <RadioGroupItem value="rustic" id="theme-rustic" className="peer sr-only" />
-                      <Label
-                        htmlFor="theme-rustic"
-                        className="flex flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-rose-50 hover:text-accent-foreground peer-data-[state=checked]:border-rose-500 peer-data-[state=checked]:bg-rose-50 [&:has([data-state=checked])]:border-rose-500 cursor-pointer transition-all h-full"
-                      >
-                        <div className="w-full aspect-[3/4] bg-orange-100 rounded-md mb-3 flex items-center justify-center overflow-hidden border border-orange-200">
-                           <span className="text-orange-800 font-serif text-sm">Rustic</span>
-                        </div>
-                        <span className="font-semibold text-sm">Rustic Floral</span>
-                      </Label>
-                    </div>
-                    {/* Template 2 */}
-                    <div>
-                      <RadioGroupItem value="modern" id="theme-modern" className="peer sr-only" />
-                      <Label
-                        htmlFor="theme-modern"
-                        className="flex flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-rose-50 hover:text-accent-foreground peer-data-[state=checked]:border-rose-500 peer-data-[state=checked]:bg-rose-50 [&:has([data-state=checked])]:border-rose-500 cursor-pointer transition-all h-full"
-                      >
-                        <div className="w-full aspect-[3/4] bg-slate-900 rounded-md mb-3 flex items-center justify-center overflow-hidden border border-slate-700">
-                           <span className="text-slate-200 font-sans font-light tracking-widest text-sm">MODERN</span>
-                        </div>
-                        <span className="font-semibold text-sm">Dark Modern</span>
-                      </Label>
-                    </div>
-                    {/* Template 3 */}
-                    <div>
-                      <RadioGroupItem value="elegant" id="theme-elegant" className="peer sr-only" />
-                      <Label
-                        htmlFor="theme-elegant"
-                        className="flex flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-rose-50 hover:text-accent-foreground peer-data-[state=checked]:border-rose-500 peer-data-[state=checked]:bg-rose-50 [&:has([data-state=checked])]:border-rose-500 cursor-pointer transition-all h-full"
-                      >
-                        <div className="w-full aspect-[3/4] bg-rose-50 rounded-md mb-3 flex items-center justify-center overflow-hidden border border-rose-200">
-                           <span className="text-rose-600 font-serif italic text-sm">Elegant</span>
-                        </div>
-                        <span className="font-semibold text-sm">Rose Elegant</span>
-                      </Label>
-                    </div>
-                  </RadioGroup>
-
-                  <h4 className="font-semibold text-sm pt-2 border-t">Data Mempelai</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                    <div className="space-y-2">
-                      <Label>Nama Pria</Label>
-                      <Input 
-                        placeholder="Budi" 
-                        value={templateData.nama_pria}
-                        onChange={(e) => setTemplateData({...templateData, nama_pria: e.target.value})}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Nama Wanita</Label>
-                      <Input 
-                        placeholder="Ani" 
-                        value={templateData.nama_wanita}
-                        onChange={(e) => setTemplateData({...templateData, nama_wanita: e.target.value})}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Tanggal Acara</Label>
-                      <Input 
-                        type="date"
-                        value={templateData.tanggal_acara}
-                        onChange={(e) => setTemplateData({...templateData, tanggal_acara: e.target.value})}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Lokasi / Alamat Lengkap</Label>
-                      <Input 
-                        placeholder="Gedung XYZ, Jakarta" 
-                        value={templateData.lokasi_acara}
-                        onChange={(e) => setTemplateData({...templateData, lokasi_acara: e.target.value})}
-                      />
-                    </div>
-                  </div>
+                  <h4 className="font-bold text-xl text-slate-800 mb-2">Desain & Isi Undangan Anda</h4>
+                  <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-6">
+                    Buka editor khusus undangan untuk memilih tema, mengisi data mempelai, jadwal acara, hingga rekening amplop digital dengan fitur Live Preview.
+                  </p>
+                  <Button asChild size="lg" className="bg-rose-600 hover:bg-rose-700 text-white rounded-full px-8 shadow-lg">
+                    <a href={`/dashboard/undangan/${tenant.id}/edit`}>
+                      <LayoutTemplate className="w-4 h-4 mr-2" /> Buka Editor Undangan
+                    </a>
+                  </Button>
                 </div>
               </div>
             )}
