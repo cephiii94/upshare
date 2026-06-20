@@ -61,15 +61,32 @@ export async function proxy(req: NextRequest) {
       // Karena rpc get_tenant_with_details sudah memfilter is_active = true,
       // kita cukup cek target_url
       if (data && data.target_url) {
-        // Hapus trailing slash jika ada
-        const cleanTarget = data.target_url.replace(/\/$/, "");
+        // Gunakan URL API untuk memecah host dan path dari target_url
+        const targetUrlObj = new URL(data.target_url);
+        const targetHost = targetUrlObj.origin;
+        // Hapus trailing slash jika ada, misal /hello-world/ jadi /hello-world
+        // Jika root "/", jadinya string kosong ""
+        const targetBasePath = targetUrlObj.pathname === "/" ? "" : targetUrlObj.pathname.replace(/\/$/, "");
+
+        let proxyPath = url.pathname;
         
-        // Jika path yang diminta adalah root "/", jangan tambahkan "/" di akhir
-        // Ini mencegah "https://site.com/page" menjadi "https://site.com/page/"
-        const targetPath = url.pathname === "/" ? "" : url.pathname;
+        // Cek jika path yang direquest sudah mengandung basePath dari target (mencegah duplikasi /hello-world/hello-world/...)
+        // Ini sering terjadi jika web builder menggunakan tag <base href="...">
+        const alreadyHasBasePath = targetBasePath !== "" && (proxyPath === targetBasePath || proxyPath.startsWith(targetBasePath + "/"));
         
-        // Buat URL proxy dengan menggabungkan target + pathname saat ini
-        const proxyUrl = new URL(`${cleanTarget}${targetPath}${url.search}`);
+        if (alreadyHasBasePath) {
+          // Biarkan proxyPath apa adanya
+        } else {
+          // Gabungkan basePath dengan proxyPath
+          if (proxyPath === "/") {
+            proxyPath = targetBasePath;
+          } else {
+            proxyPath = targetBasePath + proxyPath;
+          }
+        }
+
+        // Buat URL proxy final
+        const proxyUrl = new URL(`${targetHost}${proxyPath}${url.search}`);
         
 
         
