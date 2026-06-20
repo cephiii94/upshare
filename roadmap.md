@@ -81,3 +81,13 @@ Fokus pada halaman aplikasi internal (Dashboard) tempat user mengatur URL target
 *   [x] Pembuatan UI Dashboard yang modern (Sidebar navigation, Overview, Settings).
 *   [x] Form manajemen URL Target di Dashboard untuk menyambungkan subdomain ke Netlify/Vercel.
 *   [x] Integrasi Reverse Proxy (Rewrite) di `src/middleware.ts` & `src/proxy.ts` untuk memproses `target_url` secara otomatis (lengkap dengan sistem injeksi Watermark).
+
+---
+
+## ✅ Fase 6: Editor Undangan Digital & Sistem Tema (Selesai)
+Fokus pada pembuatan fitur utama kedua dari Upshare: platform pembuat undangan pernikahan digital dengan live-preview.
+
+*   [x] **Desain Skema Database Undangan:** Menambahkan JSONB `template_data` di tabel `tenants` (Sudah ada) dan mendefinisikan struktur data (Mempelai, Acara, Galeri).
+*   [x] **Halaman Pemilihan Tema (`/dashboard/undangan/templates`):** Membuat galeri tema undangan (contoh: Premium Elegance, Rustic, Floral) yang bisa dipilih oleh user.
+*   [x] **Live-Preview Editor (`/dashboard/undangan/[id]/edit`):** Membuat antarmuka editor di mana user bisa mengisi data (nama mempelai, tanggal) dan melihat perubahannya secara *real-time* di sisi kanan layar.
+*   [x] **Mesin Render Tema (`src/app/[subdomain]/page.tsx`):** Menampilkan halaman undangan asli ke pengunjung (publik) berdasarkan tema dan data yang sudah disimpan oleh user.

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TemplateRenderer } from "@/components/templates";
-import { ArrowLeft, Save, Loader2, Smartphone, Rocket } from "lucide-react";
+import { ArrowLeft, Save, Loader2, Smartphone, Rocket, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -113,21 +113,30 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
             <div className="font-semibold text-sm">
               {isDraft ? "Draft Undangan" : `Editor: ${tenant.subdomain}.upshare.id`}
             </div>
-            <Button 
-              size="sm" 
-              onClick={handleSave} 
-              disabled={isSaving} 
-              className={isDraft ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-rose-600 hover:bg-rose-700 text-white"}
-            >
-              {isSaving ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : isDraft ? (
-                <Rocket className="w-4 h-4 mr-2" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
+            <div className="flex items-center gap-2">
+              {!isDraft && (
+                <Button asChild variant="outline" size="sm" className="hidden lg:flex">
+                  <Link href={`/dashboard/undangan/${tenant.id}/rsvp`}>
+                    <Users className="w-4 h-4 mr-2" /> RSVP & Buku Tamu
+                  </Link>
+                </Button>
               )}
-              {isDraft ? "Publikasikan" : "Simpan"}
-            </Button>
+              <Button 
+                size="sm" 
+                onClick={handleSave} 
+                disabled={isSaving} 
+                className={isDraft ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-rose-600 hover:bg-rose-700 text-white"}
+              >
+                {isSaving ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : isDraft ? (
+                  <Rocket className="w-4 h-4 mr-2" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                {isDraft ? "Publikasikan" : "Simpan"}
+              </Button>
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-6">
