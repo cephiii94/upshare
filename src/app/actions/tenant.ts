@@ -227,7 +227,7 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
     };
   }
 
-  return { success: true, message: "Subdomain berhasil dibuat!", data: { id: newTenant.id } };
+  return { success: true, message: "Subdomain berhasil dibuat!", data: { id: newTenant.id, requirePayment: false } };
 });
 
 const DeleteSubdomainSchema = z.object({
