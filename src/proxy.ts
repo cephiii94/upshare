@@ -64,8 +64,12 @@ export async function proxy(req: NextRequest) {
         // Hapus trailing slash jika ada
         const cleanTarget = data.target_url.replace(/\/$/, "");
         
+        // Jika path yang diminta adalah root "/", jangan tambahkan "/" di akhir
+        // Ini mencegah "https://site.com/page" menjadi "https://site.com/page/"
+        const targetPath = url.pathname === "/" ? "" : url.pathname;
+        
         // Buat URL proxy dengan menggabungkan target + pathname saat ini
-        const proxyUrl = new URL(`${cleanTarget}${url.pathname}${url.search}`);
+        const proxyUrl = new URL(`${cleanTarget}${targetPath}${url.search}`);
         
 
         

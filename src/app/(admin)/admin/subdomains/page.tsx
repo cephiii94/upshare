@@ -52,7 +52,7 @@ export default async function AdminSubdomainsPage() {
                   <tr key={tenant.id} className="border-b last:border-0 hover:bg-muted/20">
                     <td className="px-6 py-4 font-medium text-foreground">
                       <a 
-                        href={`http://${tenant.subdomain}.localhost:3000`} 
+                        href={`https://${tenant.subdomain}.upshare.id`} 
                         target="_blank" 
                         rel="noreferrer"
                         className="hover:underline text-primary"
