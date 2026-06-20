@@ -11,7 +11,8 @@ graph TD
     Phase1[Fase 1: Fondasi & UI Marketing] -->|Selesai| Phase2[Fase 2: Otentikasi & Database]
     Phase2 -->|Selesai| Phase3[Fase 3: Multi-tenant Routing]
     Phase3 -->|Selesai| Phase4[Fase 4: Integrasi Pembayaran & Email]
-    Phase4 -->|Akan Datang| Phase5[Fase 5: Dashboard & Zustand Store]
+    Phase4 -->|Selesai| Phase5[Fase 5: Dashboard & Sistem Proxy]
+    Phase5 -->|Akan Datang| Phase6[Fase 6: Fitur Undangan Digital]
 ```
 
 ---
@@ -73,10 +74,10 @@ Fokus pada monetisasi platform dan notifikasi email setelah transaksi atau regis
 
 ---
 
-## ⏳ Fase 5: Dashboard & Sistem Proxy Subdomain (Sedang Berjalan)
+## ✅ Fase 5: Dashboard & Sistem Proxy Subdomain (Selesai)
 Fokus pada halaman aplikasi internal (Dashboard) tempat user mengatur URL target dan implementasi Reverse Proxy di Middleware.
 
-*   [ ] Pembaruan skema `tenants` di Supabase untuk menyimpan `target_url`.
-*   [ ] Pembuatan UI Dashboard yang modern (Sidebar navigation, Overview, Settings).
-*   [ ] Form manajemen URL Target di Dashboard untuk menyambungkan subdomain ke Netlify/Vercel.
-*   [ ] Integrasi Reverse Proxy (Rewrite) di `src/middleware.ts` untuk memproses `target_url` secara otomatis.
+*   [x] Pembaruan skema `tenants` di Supabase untuk menyimpan `target_url`.
+*   [x] Pembuatan UI Dashboard yang modern (Sidebar navigation, Overview, Settings).
+*   [x] Form manajemen URL Target di Dashboard untuk menyambungkan subdomain ke Netlify/Vercel.
+*   [x] Integrasi Reverse Proxy (Rewrite) di `src/middleware.ts` & `src/proxy.ts` untuk memproses `target_url` secara otomatis (lengkap dengan sistem injeksi Watermark).

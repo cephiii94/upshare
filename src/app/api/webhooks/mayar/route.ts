@@ -40,7 +40,39 @@ export async function POST(req: NextRequest) {
     // 3. Update Database (Supabase) via Admin (bypass RLS)
     const supabaseAdmin = getSupabaseAdmin();
     
-    // a. Upsert Subscription
+    // Cek apakah ini transaksi subscription atau topup/addon
+    const transactionType = customFields.type || 'subscription';
+
+    if (transactionType === 'topup' || transactionType === 'addon_domain') {
+      // TODO: Implementasi logika penambahan saldo (wallets) atau perpanjangan domain (expires_at)
+      console.log(`[Webhook] Menerima pembayaran ${transactionType} sebesar ${payload.amount} untuk user ${userId}`);
+      
+      // Catat di tabel transactions
+      await supabaseAdmin.from("transactions").insert({
+        user_id: userId,
+        type: transactionType,
+        amount: payload.amount || 0,
+        status: "success",
+        reference_id: payload.id || null,
+        description: `Pembayaran ${transactionType} berhasil`
+      });
+
+      // Jika addon_domain, perpanjang expires_at domain spesifik
+      if (transactionType === 'addon_domain' && customFields.tenant_id) {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        await supabaseAdmin.from("tenants").update({
+          is_active: true,
+          expires_at: nextMonth.toISOString()
+        }).eq("id", customFields.tenant_id).eq("user_id", userId);
+      } else if (transactionType === 'topup') {
+        // TODO: Tambah saldo user
+      }
+
+      return NextResponse.json({ success: true, message: `Webhook processed for ${transactionType}` }, { status: 200 });
+    }
+
+    // a. Upsert Subscription (Logika default)
     const now = new Date();
     const nextMonth = new Date();
     nextMonth.setMonth(nextMonth.getMonth() + 1);
@@ -60,11 +92,12 @@ export async function POST(req: NextRequest) {
       throw subError;
     }
 
-    // b. Aktifkan Tenant jika ada
+    // b. Aktifkan Tenant bawaan tier jika ada (is_addon = false)
     const { error: tenantError } = await supabaseAdmin
       .from("tenants")
       .update({ is_active: true })
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .eq("is_addon", false);
 
     if (tenantError) {
       console.error("Error activating tenant:", tenantError);

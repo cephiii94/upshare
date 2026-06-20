@@ -13,7 +13,9 @@ export interface CreatePaymentLinkParams {
   customerName: string;
   customerEmail: string;
   userId: string;
-  planId: "pro" | "business";
+  planId?: string;
+  type?: "subscription" | "addon_domain" | "topup";
+  tenantId?: string;
 }
 
 export async function createPaymentLink(params: CreatePaymentLinkParams) {
@@ -34,6 +36,8 @@ export async function createPaymentLink(params: CreatePaymentLinkParams) {
     custom_field: {
       user_id: params.userId,
       plan_id: params.planId,
+      type: params.type || "subscription",
+      tenant_id: params.tenantId,
     },
   };
 

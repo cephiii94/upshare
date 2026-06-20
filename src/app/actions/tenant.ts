@@ -160,9 +160,9 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
   }
 
   // Cek jumlah subdomain yang sudah dimiliki user
-  const { data: existingTenant } = await supabase
+  const { data: allTenants } = await supabase
     .from("tenants")
-    .select("id")
+    .select("id, is_addon")
     .eq("user_id", user.id);
 
   const { data: profile } = await supabase
@@ -173,18 +173,21 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
 
   const { data: subscription } = await supabase
     .from("subscriptions")
-    .select("status")
+    .select("plan, status")
     .eq("user_id", user.id)
     .single();
 
   const isAdmin = profile?.is_admin || false;
-  const isPro = subscription?.status === "active";
-  const hasUnlimited = isAdmin || isPro;
+  const isPro = subscription?.status === "active" && subscription?.plan === "pro";
+  const isBusiness = subscription?.status === "active" && subscription?.plan === "business";
 
-  // Paket Gratis maksimal 1 (Admin & Premium bebas)
-  if (existingTenant && existingTenant.length >= 1 && !hasUnlimited) {
-    return { success: false, error: "Anda sudah memiliki subdomain. (Paket Gratis maksimal 1)" };
-  }
+  let maxBaseDomains = 1;
+  if (isPro) maxBaseDomains = 3;
+  if (isBusiness) maxBaseDomains = 10;
+  if (isAdmin) maxBaseDomains = 999;
+
+  const baseTenantsCount = allTenants?.filter(t => !t.is_addon).length || 0;
+  const isOverQuota = baseTenantsCount >= maxBaseDomains;
 
   // Cek ketersediaan subdomain
   const isAvailable = await checkSubdomainAvailability(subdomain);
@@ -202,7 +205,8 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
       category: category,
       target_url: target_url || null,
       template_data: parsedTemplateData,
-      is_active: true, // Untuk saat ini kita buat langsung aktif
+      is_active: !isOverQuota,
+      is_addon: isOverQuota,
     })
     .select("id")
     .single();
@@ -214,6 +218,14 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/subdomains");
+
+  if (isOverQuota) {
+    return { 
+      success: true, 
+      message: "Subdomain dibuat! Karena kuota bawaan habis, silakan lakukan aktivasi (Beli Add-on).", 
+      data: { id: newTenant.id, requirePayment: true } 
+    };
+  }
 
   return { success: true, message: "Subdomain berhasil dibuat!", data: { id: newTenant.id } };
 });

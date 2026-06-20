@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS public.tenants (
   is_active     BOOLEAN NOT NULL DEFAULT false,
   category      TEXT NOT NULL DEFAULT 'universal',
   template_data JSONB,
+  expires_at    TIMESTAMPTZ,
+  is_addon      BOOLEAN NOT NULL DEFAULT false,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
 
@@ -130,6 +132,51 @@ CREATE INDEX IF NOT EXISTS idx_subscriptions_mayar_id ON public.subscriptions(ma
 
 
 -- ============================================================
+-- TABLE: wallets
+-- Menyimpan saldo user untuk top-up dan pembelian add-on
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.wallets (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id     UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  balance     NUMERIC NOT NULL DEFAULT 0,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT unique_user_wallet UNIQUE (user_id)
+);
+
+COMMENT ON TABLE public.wallets IS 'Saldo dompet pengguna untuk transaksi add-on';
+
+CREATE OR REPLACE TRIGGER wallets_updated_at
+  BEFORE UPDATE ON public.wallets
+  FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+
+-- ============================================================
+-- TABLE: transactions
+-- Menyimpan riwayat transaksi (top-up saldo atau pembelian add-on)
+-- ============================================================
+CREATE TYPE public.transaction_type AS ENUM ('topup', 'addon_domain');
+CREATE TYPE public.transaction_status AS ENUM ('pending', 'success', 'failed');
+
+CREATE TABLE IF NOT EXISTS public.transactions (
+  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id         UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  type            public.transaction_type NOT NULL,
+  amount          NUMERIC NOT NULL,
+  status          public.transaction_status NOT NULL DEFAULT 'pending',
+  reference_id    TEXT,
+  description     TEXT,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE public.transactions IS 'Riwayat transaksi top-up dan pemakaian saldo';
+
+CREATE OR REPLACE TRIGGER transactions_updated_at
+  BEFORE UPDATE ON public.transactions
+  FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+
+
+-- ============================================================
 -- ROW LEVEL SECURITY (RLS)
 -- ============================================================
 
@@ -182,6 +229,18 @@ CREATE POLICY "subscriptions_select_own"
 -- Insert & Update hanya via service role (webhook Mayar.id)
 -- Tidak ada policy INSERT/UPDATE untuk authenticated user biasa
 -- Gunakan Supabase Service Role Key di API route webhook
+
+-- ── wallets ────────────────────────────────────────────────
+ALTER TABLE public.wallets ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "wallets_select_own"
+  ON public.wallets FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- ── transactions ───────────────────────────────────────────
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "transactions_select_own"
+  ON public.transactions FOR SELECT
+  USING (auth.uid() = user_id);
 
 
 -- ============================================================

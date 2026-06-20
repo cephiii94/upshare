@@ -83,8 +83,17 @@ export default async function SubdomainsPage() {
                 <Card key={tenant.id} className="glass shadow-sm hover:shadow-md transition-all border-rose-100 overflow-hidden group">
                   <div className="h-2 w-full bg-gradient-to-r from-rose-400 to-rose-600" />
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl font-bold text-slate-800 flex items-center justify-between">
+                    <CardTitle className="text-xl font-bold text-slate-800 flex flex-col items-start gap-2 sm:flex-row sm:items-center justify-between">
                       <span className="truncate">{tenant.subdomain}.upshare.id</span>
+                      {tenant.is_addon ? (
+                        <Badge variant="destructive" className="text-xs">
+                          Addon (Exp: {tenant.expires_at ? new Date(tenant.expires_at).toLocaleDateString("id-ID") : "-"})
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="text-xs bg-rose-100 text-rose-800 hover:bg-rose-100 border-0">
+                          Bawaan Paket
+                        </Badge>
+                      )}
                     </CardTitle>
                     <CardDescription>
                       Dibuat pada {new Date(tenant.created_at).toLocaleDateString("id-ID")}
@@ -107,7 +116,20 @@ export default async function SubdomainsPage() {
                         Hapus
                       </Button>
                     </form>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      {tenant.is_addon && (
+                        <form action={async () => {
+                          "use server";
+                          const { buyAddonDomain } = await import("@/app/actions/checkout");
+                          const formData = new FormData();
+                          formData.set("tenant_id", tenant.id);
+                          await buyAddonDomain(formData);
+                        }}>
+                          <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm">
+                            {tenant.is_active ? "Perpanjang (Rp 10rb)" : "Aktifkan (Rp 10rb)"}
+                          </Button>
+                        </form>
+                      )}
                        <Button asChild size="sm" variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-50">
                         <a href={`http://${tenant.subdomain}.localhost:3000`} target="_blank" rel="noreferrer">
                            Lihat
@@ -160,11 +182,20 @@ export default async function SubdomainsPage() {
               {universalTenants.map((tenant) => (
                 <Card key={tenant.id} className="glass shadow-sm hover:shadow-md transition-all border-border/50">
                   <CardHeader className="pb-4 border-b bg-muted/20">
-                    <CardTitle className="text-xl font-bold text-primary flex items-center justify-between">
+                    <CardTitle className="text-xl font-bold text-primary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                       <a href={`http://${tenant.subdomain}.localhost:3000`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2">
                         <Globe className="h-5 w-5" />
                         {tenant.subdomain}.upshare.id
                       </a>
+                      {tenant.is_addon ? (
+                        <Badge variant="destructive" className="text-xs">
+                          Addon (Exp: {tenant.expires_at ? new Date(tenant.expires_at).toLocaleDateString("id-ID") : "-"})
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 hover:bg-green-100 border-0">
+                          Bawaan Paket
+                        </Badge>
+                      )}
                     </CardTitle>
                     <CardDescription>
                       Dibuat pada {new Date(tenant.created_at).toLocaleDateString("id-ID")}
@@ -194,11 +225,26 @@ export default async function SubdomainsPage() {
                         Hapus
                       </Button>
                     </form>
-                    <Button asChild size="sm">
-                      <Link href={`/dashboard/subdomains/${tenant.id}`}>
-                        Pengaturan Proxy
-                      </Link>
-                    </Button>
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      {tenant.is_addon && (
+                        <form action={async () => {
+                          "use server";
+                          const { buyAddonDomain } = await import("@/app/actions/checkout");
+                          const formData = new FormData();
+                          formData.set("tenant_id", tenant.id);
+                          await buyAddonDomain(formData);
+                        }}>
+                          <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm">
+                            {tenant.is_active ? "Perpanjang (Rp 10rb)" : "Aktifkan (Rp 10rb)"}
+                          </Button>
+                        </form>
+                      )}
+                      <Button asChild size="sm">
+                        <Link href={`/dashboard/subdomains/${tenant.id}`}>
+                          Pengaturan Proxy
+                        </Link>
+                      </Button>
+                    </div>
                   </CardFooter>
                 </Card>
               ))}
