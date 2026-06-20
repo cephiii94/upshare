@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function SubdomainsPage() {
   const supabase = await createClient();
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
+  const protocol = rootDomain.includes("localhost") ? "http" : "https";
 
   const {
     data: { user },
@@ -84,7 +86,7 @@ export default async function SubdomainsPage() {
                   <div className="h-2 w-full bg-gradient-to-r from-rose-400 to-rose-600" />
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold text-slate-800 flex flex-col items-start gap-2 sm:flex-row sm:items-center justify-between">
-                      <span className="truncate">{tenant.subdomain}.upshare.id</span>
+                      <span className="truncate">{tenant.subdomain}.{rootDomain}</span>
                       {tenant.is_addon ? (
                         <Badge variant="destructive" className="text-xs">
                           Addon (Exp: {tenant.expires_at ? new Date(tenant.expires_at).toLocaleDateString("id-ID") : "-"})
@@ -131,7 +133,7 @@ export default async function SubdomainsPage() {
                         </form>
                       )}
                        <Button asChild size="sm" variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-50">
-                        <a href={`http://${tenant.subdomain}.localhost:3000`} target="_blank" rel="noreferrer">
+                        <a href={`${protocol}://${tenant.subdomain}.${rootDomain}`} target="_blank" rel="noreferrer">
                            Lihat
                         </a>
                       </Button>
@@ -183,9 +185,9 @@ export default async function SubdomainsPage() {
                 <Card key={tenant.id} className="glass shadow-sm hover:shadow-md transition-all border-border/50">
                   <CardHeader className="pb-4 border-b bg-muted/20">
                     <CardTitle className="text-xl font-bold text-primary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                      <a href={`http://${tenant.subdomain}.localhost:3000`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2">
+                      <a href={`${protocol}://${tenant.subdomain}.${rootDomain}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2">
                         <Globe className="h-5 w-5" />
-                        {tenant.subdomain}.upshare.id
+                        {tenant.subdomain}.{rootDomain}
                       </a>
                       {tenant.is_addon ? (
                         <Badge variant="destructive" className="text-xs">

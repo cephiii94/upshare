@@ -9,6 +9,8 @@ import { CopyButton } from "@/components/dashboard/copy-button";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
+  const protocol = rootDomain.includes("localhost") ? "http" : "https";
 
   const {
     data: { user },
@@ -161,7 +163,7 @@ export default async function DashboardPage() {
                     <div className="flex items-center justify-between w-full pr-4">
                       <span className="flex items-center gap-2 font-mono text-base text-primary">
                         <Globe className="h-4 w-4 text-muted-foreground" />
-                        {t.subdomain}.upshare.id
+                        {t.subdomain}.{rootDomain}
                       </span>
                       <Badge variant={t.is_active ? "default" : "destructive"}>
                         {t.is_active ? "Aktif" : "Menunggu Pembayaran"}
@@ -180,12 +182,12 @@ export default async function DashboardPage() {
                           </span>
                           <div className="bg-background border shadow-sm rounded-md py-2 px-3 w-full flex items-center justify-between">
                             <span className="font-mono text-sm font-semibold truncate text-primary">
-                              {t.subdomain}.upshare.id
+                              {t.subdomain}.{rootDomain}
                             </span>
                             <div className="flex items-center gap-1 ml-2">
-                              <CopyButton textToCopy={`https://${t.subdomain}.upshare.id`} />
+                              <CopyButton textToCopy={`${protocol}://${t.subdomain}.${rootDomain}`} />
                               <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary" asChild>
-                                <a href={`https://${t.subdomain}.upshare.id`} target="_blank" rel="noreferrer" title="Buka URL">
+                                <a href={`${protocol}://${t.subdomain}.${rootDomain}`} target="_blank" rel="noreferrer" title="Buka URL">
                                   <ExternalLink className="h-3.5 w-3.5" />
                                 </a>
                               </Button>
