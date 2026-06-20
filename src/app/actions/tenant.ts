@@ -194,7 +194,7 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
   }
 
   // Klaim subdomain baru beserta pengaturannya
-  const { error } = await supabase
+  const { data: newTenant, error } = await supabase
     .from("tenants")
     .insert({
       user_id: user.id,
@@ -203,7 +203,9 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
       target_url: target_url || null,
       template_data: parsedTemplateData,
       is_active: true, // Untuk saat ini kita buat langsung aktif
-    });
+    })
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Error claiming subdomain:", error);
@@ -213,7 +215,7 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/subdomains");
 
-  return { success: true, message: "Subdomain berhasil dibuat!" };
+  return { success: true, message: "Subdomain berhasil dibuat!", data: { id: newTenant.id } };
 });
 
 const DeleteSubdomainSchema = z.object({

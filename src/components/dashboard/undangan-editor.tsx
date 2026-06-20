@@ -77,13 +77,19 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
 
     try {
       const result = await claimSubdomain(formData);
-      if (result?.success && result.tenant?.id) {
+      if (!result?.success) {
+        toast.error(result?.error || "Gagal mempublikasikan undangan.");
+        setIsSaving(false);
+        return;
+      }
+
+      if (result.data?.id) {
         toast.success("Undangan berhasil dipublikasikan!");
         setPublishDialogOpen(false);
         // Redirect to edit mode for the new tenant
-        router.push(`/dashboard/undangan/${result.tenant.id}/edit`);
+        router.push(`/dashboard/undangan/${result.data.id}/edit`);
       } else {
-        toast.error(result?.error || "Gagal mempublikasikan undangan.");
+        toast.error("Gagal mempublikasikan undangan: ID tidak ditemukan.");
         setIsSaving(false);
       }
     } catch (e) {
