@@ -6,6 +6,7 @@ import { z } from "zod";
 import { headers } from "next/headers";
 import { tenantRateLimit } from "@/lib/ratelimit";
 import { safeAction } from "@/lib/safe-action";
+import { isSubdomainReserved } from "@/lib/subdomain";
 
 // ── Schemas ────────────────────────────────────────────────────────────────
 const SubdomainSchema = z.object({
@@ -16,7 +17,10 @@ const SubdomainSchema = z.object({
     .regex(/^[a-z0-9-]+$/, {
       message: "Subdomain hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).",
     })
-    .trim(),
+    .trim()
+    .refine((val) => !isSubdomainReserved(val), {
+      message: "Nama subdomain ini dilarang atau tidak tersedia.",
+    }),
 });
 
 const TenantSettingsSchema = z.object({
@@ -97,7 +101,10 @@ const CreateSubdomainSchema = z.object({
     .regex(/^[a-z0-9-]+$/, {
       message: "Subdomain hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).",
     })
-    .trim(),
+    .trim()
+    .refine((val) => !isSubdomainReserved(val), {
+      message: "Nama subdomain ini dilarang atau tidak tersedia.",
+    }),
   category: z.enum(["universal", "undangan"]),
   target_url: z.string().nullable().optional().transform(url => {
     if (!url) return null;
@@ -112,6 +119,7 @@ const CreateSubdomainSchema = z.object({
 
 export const checkSubdomainAvailability = async (subdomain: string) => {
   if (!subdomain || subdomain.length < 3) return false;
+  if (isSubdomainReserved(subdomain)) return false;
   
   const supabase = await createClient();
   const { data: takenSubdomain } = await supabase

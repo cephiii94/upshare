@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { claimSubdomain, checkSubdomainAvailability } from "@/app/actions/tenant";
+import { validateSubdomainFormat } from "@/lib/subdomain";
 import { toast } from "sonner";
 import { Loader2, Globe, Heart, CheckCircle2, XCircle, LayoutTemplate } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
   // Step 2 State
   const [subdomain, setSubdomain] = useState("");
   const [subdomainAvailable, setSubdomainAvailable] = useState<boolean | null>(null);
+  const [subdomainError, setSubdomainError] = useState<string | null>(null);
   const [checkingSubdomain, setCheckingSubdomain] = useState(false);
   const [targetUrl, setTargetUrl] = useState("");
   const [templateData, setTemplateData] = useState({
@@ -34,15 +36,28 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
 
   // Debounce for live validation
   useEffect(() => {
-    if (subdomain.length < 3) {
+    setSubdomainError(null);
+    if (subdomain.length === 0) {
       setSubdomainAvailable(null);
       return;
+    }
+    
+    if (subdomain.length > 0) {
+      const formatCheck = validateSubdomainFormat(subdomain);
+      if (!formatCheck.isValid) {
+        setSubdomainError(formatCheck.message);
+        setSubdomainAvailable(false);
+        return;
+      }
     }
 
     const delayDebounceFn = setTimeout(async () => {
       setCheckingSubdomain(true);
       const available = await checkSubdomainAvailability(subdomain);
       setSubdomainAvailable(available);
+      if (!available) {
+        setSubdomainError("Subdomain ini sudah digunakan orang lain.");
+      }
       setCheckingSubdomain(false);
     }, 500);
 
@@ -181,9 +196,6 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
                 
                 {/* Validation Feedback */}
                 <div className="h-6 flex items-center text-sm">
-                  {subdomain.length > 0 && subdomain.length < 3 && (
-                    <span className="text-muted-foreground">Minimal 3 karakter.</span>
-                  )}
                   {checkingSubdomain && (
                     <span className="flex items-center text-muted-foreground">
                       <Loader2 className="w-3 h-3 mr-2 animate-spin" /> Memeriksa ketersediaan...
@@ -194,9 +206,9 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
                       <CheckCircle2 className="w-4 h-4 mr-1" /> Tersedia!
                     </span>
                   )}
-                  {!checkingSubdomain && subdomainAvailable === false && subdomain.length >= 3 && (
+                  {!checkingSubdomain && subdomainAvailable === false && subdomainError && (
                     <span className="flex items-center text-red-500 font-medium">
-                      <XCircle className="w-4 h-4 mr-1" /> Sudah dipakai orang lain.
+                      <XCircle className="w-4 h-4 mr-1" /> {subdomainError}
                     </span>
                   )}
                 </div>
