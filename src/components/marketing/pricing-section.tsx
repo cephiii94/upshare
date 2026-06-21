@@ -16,7 +16,7 @@ const plans = [
     badge: null,
     features: [
       { text: "1 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true },
+      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik dasar", included: true },
       { text: "Bebas Watermark Upshare", included: false },
@@ -36,7 +36,7 @@ const plans = [
     badge: "Paling Populer",
     features: [
       { text: "3 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true },
+      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik lengkap", included: true },
       { text: "Bebas Watermark & Custom Tema", included: true },
@@ -57,7 +57,7 @@ const plans = [
     badge: null,
     features: [
       { text: "10 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true },
+      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik advanced", included: true },
       { text: "Bebas Watermark & Custom Tema", included: true },
@@ -136,24 +136,29 @@ export function PricingSection() {
 
               {/* Features */}
               <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((feature) => (
-                  <li key={feature.text} className="flex items-start gap-2.5">
-                    {feature.included ? (
-                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="w-4 h-4 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
-                    )}
-                    <span
-                      className={`text-sm ${
-                        feature.included
-                          ? "text-foreground"
-                          : "text-muted-foreground/60"
-                      }`}
-                    >
-                      {feature.text}
-                    </span>
-                  </li>
-                ))}
+                {plan.features.map((feature) => {
+                  const isHighlighted = "highlight" in feature && feature.highlight;
+                  return (
+                    <li key={feature.text} className="flex items-start gap-2.5">
+                      {feature.included ? (
+                        <CheckCircle2 className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isHighlighted ? "text-amber-500" : "text-primary"}`} />
+                      ) : (
+                        <X className="w-4 h-4 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
+                      )}
+                      <span
+                        className={`text-sm ${
+                          feature.included
+                            ? isHighlighted
+                              ? "text-amber-600 dark:text-amber-500 font-medium"
+                              : "text-foreground"
+                            : "text-muted-foreground/60"
+                        }`}
+                      >
+                        {feature.text}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* CTA */}

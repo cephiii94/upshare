@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DeleteSubdomainButton } from "@/components/dashboard/delete-subdomain-button";
 
 export default async function SubdomainsPage() {
   const supabase = await createClient();
@@ -107,17 +108,14 @@ export default async function SubdomainsPage() {
                      </span>
                   </CardContent>
                   <CardFooter className="pt-4 flex justify-between border-t bg-slate-50 p-4">
-                    <form action={async () => {
-                      "use server";
-                      const { deleteSubdomain } = await import("@/app/actions/tenant");
-                      const formData = new FormData();
-                      formData.set("tenant_id", tenant.id);
-                      await deleteSubdomain(formData);
-                    }}>
-                      <Button type="submit" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" size="sm">
-                        Hapus
-                      </Button>
-                    </form>
+                    <DeleteSubdomainButton
+                       tenantId={tenant.id}
+                       deleteAction={async (formData) => {
+                         "use server";
+                         const { deleteSubdomain } = await import("@/app/actions/tenant");
+                         await deleteSubdomain(formData);
+                       }}
+                     />
                     <div className="flex flex-wrap gap-2 justify-end">
                       {tenant.is_addon && (
                         <form action={async () => {
@@ -216,38 +214,35 @@ export default async function SubdomainsPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="pt-0 flex justify-between border-t bg-muted/10 p-4">
-                    <form action={async () => {
-                      "use server";
-                      const { deleteSubdomain } = await import("@/app/actions/tenant");
-                      const formData = new FormData();
-                      formData.set("tenant_id", tenant.id);
-                      await deleteSubdomain(formData);
-                    }}>
-                      <Button type="submit" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" size="sm">
-                        Hapus
-                      </Button>
-                    </form>
-                    <div className="flex flex-wrap gap-2 justify-end">
-                      {tenant.is_addon && (
-                        <form action={async () => {
-                          "use server";
-                          const { buyAddonDomain } = await import("@/app/actions/checkout");
-                          const formData = new FormData();
-                          formData.set("tenant_id", tenant.id);
-                          await buyAddonDomain(formData);
-                        }}>
-                          <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm">
-                            {tenant.is_active ? "Perpanjang (Rp 10rb)" : "Aktifkan (Rp 10rb)"}
-                          </Button>
-                        </form>
-                      )}
-                      <Button asChild size="sm">
-                        <Link href={`/dashboard/subdomains/${tenant.id}`}>
-                          Pengaturan Proxy
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardFooter>
+                     <DeleteSubdomainButton
+                       tenantId={tenant.id}
+                       deleteAction={async (formData) => {
+                         "use server";
+                         const { deleteSubdomain } = await import("@/app/actions/tenant");
+                         await deleteSubdomain(formData);
+                       }}
+                     />
+                     <div className="flex flex-wrap gap-2 justify-end">
+                       {tenant.is_addon && (
+                         <form action={async () => {
+                           "use server";
+                           const { buyAddonDomain } = await import("@/app/actions/checkout");
+                           const formData = new FormData();
+                           formData.set("tenant_id", tenant.id);
+                           await buyAddonDomain(formData);
+                         }}>
+                           <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm">
+                             {tenant.is_active ? "Perpanjang (Rp 10rb)" : "Aktifkan (Rp 10rb)"}
+                           </Button>
+                         </form>
+                       )}
+                       <Button asChild size="sm">
+                         <Link href={`/dashboard/subdomains/${tenant.id}`}>
+                           Pengaturan Proxy
+                         </Link>
+                       </Button>
+                     </div>
+                   </CardFooter>
                 </Card>
               ))}
             </div>
