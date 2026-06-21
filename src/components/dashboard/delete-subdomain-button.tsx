@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,15 +23,24 @@ interface DeleteSubdomainButtonProps {
 export function DeleteSubdomainButton({ tenantId, deleteAction }: DeleteSubdomainButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleConfirm() {
     setLoading(true);
-    const formData = new FormData();
-    formData.set("tenant_id", tenantId);
-    await deleteAction(formData);
-    setLoading(false);
-    setOpen(false);
+    try {
+      const formData = new FormData();
+      formData.set("tenant_id", tenantId);
+      await deleteAction(formData);
+      setOpen(false);
+      toast.success("Subdomain berhasil dihapus!", {
+        description: "Slot kuota Anda telah dikembalikan.",
+      });
+    } catch {
+      toast.error("Gagal menghapus subdomain.", {
+        description: "Terjadi kesalahan, silakan coba lagi.",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
