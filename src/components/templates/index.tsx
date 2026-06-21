@@ -6,28 +6,29 @@ import { PremiumWeddingTemplate } from "./premium-wedding";
 interface TemplateRendererProps {
   data: any;
   subdomain: string;
+  activeTab?: string;
 }
 
 /**
  * Komponen Koordinator (Registry)
  * Bertugas memilih komponen desain mana yang akan dirender berdasarkan theme_id dari database.
  */
-export function TemplateRenderer({ data, subdomain }: TemplateRendererProps) {
+export function TemplateRenderer({ data, subdomain, activeTab }: TemplateRendererProps) {
   // Ambil theme_id dari database, jika kosong gunakan "premium-wedding" sebagai default
   const themeId = data.theme_id || "premium-wedding"; 
   
   switch (themeId) {
     case "premium-wedding":
-      return <PremiumWeddingTemplate data={data} subdomain={subdomain} />;
+      return <PremiumWeddingTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
       
     // case "free-minimalist":
-    //   return <FreeMinimalist data={data} subdomain={subdomain} />;
+    //   return <FreeMinimalist data={data} subdomain={subdomain} activeTab={activeTab} />;
       
     // case "premium-dark-gold":
-    //   return <PremiumDarkGold data={data} subdomain={subdomain} />;
+    //   return <PremiumDarkGold data={data} subdomain={subdomain} activeTab={activeTab} />;
 
     default:
       // Fallback ke template default jika theme_id tidak dikenali
-      return <PremiumWeddingTemplate data={data} subdomain={subdomain} />;
+      return <PremiumWeddingTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
   }
 }

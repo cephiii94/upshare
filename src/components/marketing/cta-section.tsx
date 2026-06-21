@@ -39,13 +39,13 @@ export function CTASection() {
               menit. Tidak perlu kartu kredit.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center w-full sm:w-auto gap-3 sm:gap-4">
               {!mounted || loading ? (
-                <div className="w-48 h-12 bg-white/10 animate-pulse rounded-lg" />
+                <div className="w-full sm:w-48 h-12 bg-white/10 animate-pulse rounded-lg" />
               ) : user ? (
                 <Button
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
+                  className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 hover:scale-[1.02] sm:hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
                   asChild
                 >
                   <Link href="/dashboard">
@@ -57,7 +57,7 @@ export function CTASection() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
+                    className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 hover:scale-[1.02] sm:hover:scale-105 transition-all duration-200 shadow-lg px-8 h-12 text-base font-semibold"
                     asChild
                   >
                     <Link href="/register">
@@ -68,7 +68,7 @@ export function CTASection() {
                   <Button
                     size="lg"
                     variant="ghost"
-                    className="text-white hover:bg-white/10 border border-white/30 px-8 h-12 text-base"
+                    className="w-full sm:w-auto text-white hover:bg-white/10 border border-white/30 px-8 h-12 text-base"
                     asChild
                   >
                     <Link href="/login">Sudah punya akun? Masuk</Link>

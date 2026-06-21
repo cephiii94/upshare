@@ -74,7 +74,7 @@ export function HeroSectionUndangan() {
             ) : user ? (
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-rose-500 to-pink-600 text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                className="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
                 asChild
               >
                 <Link href="/dashboard">
@@ -85,7 +85,7 @@ export function HeroSectionUndangan() {
             ) : (
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-rose-500 to-pink-600 text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                className="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
                 asChild
               >
                 <Link href="/register">
@@ -97,7 +97,7 @@ export function HeroSectionUndangan() {
             <Button
               size="lg"
               variant="outline"
-              className="border-border/60 hover:bg-rose-50 dark:hover:bg-rose-950/30 hover:text-rose-600 dark:hover:text-rose-400 px-8 text-base h-12"
+              className="w-full sm:w-auto border-border/60 hover:bg-rose-50 dark:hover:bg-rose-950/30 hover:text-rose-600 dark:hover:text-rose-400 px-8 text-base h-12"
               asChild
             >
               <Link href="#features">Lihat Fitur Premium</Link>

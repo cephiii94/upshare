@@ -1,17 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, MapPin, Heart, Clock, Copy, Check, MessageSquareHeart } from "lucide-react";
 import { submitRsvp } from "@/app/actions/undangan";
 
 interface PremiumWeddingTemplateProps {
   data: any;
   subdomain: string;
+  activeTab?: string;
 }
 
-export function PremiumWeddingTemplate({ data, subdomain }: PremiumWeddingTemplateProps) {
+export function PremiumWeddingTemplate({ data, subdomain, activeTab }: PremiumWeddingTemplateProps) {
   const [copied, setCopied] = useState(false);
   const [rsvpStatus, setRsvpStatus] = useState("idle");
+
+  // Sync with activeTab from editor
+  useEffect(() => {
+    if (!activeTab) return;
+    
+    let elementId = "";
+    if (activeTab === "tema") elementId = "section-tema";
+    if (activeTab === "mempelai") elementId = "section-mempelai";
+    if (activeTab === "acara") elementId = "section-acara";
+    if (activeTab === "fitur") elementId = "section-fitur";
+
+    if (elementId) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [activeTab]);
 
   // Fallbacks for empty data
   const groom = data.nama_pria || "Romeo";
@@ -86,7 +105,7 @@ export function PremiumWeddingTemplate({ data, subdomain }: PremiumWeddingTempla
       `}} />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center p-4">
+      <section id="section-tema" className="relative min-h-screen flex items-center justify-center p-4">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-slate-900/50 z-10" />
           <img src={coverUrl} alt="Wedding Cover" className="w-full h-full object-cover" />
@@ -106,7 +125,7 @@ export function PremiumWeddingTemplate({ data, subdomain }: PremiumWeddingTempla
       </section>
 
       {/* Quote Section */}
-      <section className="py-24 px-6 bg-white text-center">
+      <section id="section-fitur" className="py-24 px-6 bg-white text-center">
         <div className="max-w-2xl mx-auto">
           <Heart className="w-8 h-8 text-rose-400 mx-auto mb-8 animate-pulse" />
           <p className="font-lora italic text-slate-600 text-lg md:text-xl leading-relaxed">
@@ -117,7 +136,7 @@ export function PremiumWeddingTemplate({ data, subdomain }: PremiumWeddingTempla
       </section>
 
       {/* Groom & Bride Details */}
-      <section className="py-24 px-6 bg-rose-50/50">
+      <section id="section-mempelai" className="py-24 px-6 bg-rose-50/50">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 text-center">
           {/* Pria */}
           <div className="glass-card p-10 rounded-[3rem]">
@@ -133,7 +152,7 @@ export function PremiumWeddingTemplate({ data, subdomain }: PremiumWeddingTempla
       </section>
 
       {/* Event Details */}
-      <section className="py-24 px-6 bg-white">
+      <section id="section-acara" className="py-24 px-6 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-playfair text-4xl font-bold text-slate-800 mb-16">Jadwal Acara</h2>
           

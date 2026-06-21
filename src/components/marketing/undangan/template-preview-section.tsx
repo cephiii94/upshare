@@ -101,7 +101,7 @@ export function TemplatePreviewSection() {
           <p className="text-muted-foreground mb-6">
             Dan masih banyak lagi template yang akan terus ditambahkan setiap bulannya.
           </p>
-          <Button size="lg" asChild className="rounded-full px-8 shadow-lg bg-rose-600 hover:bg-rose-700 text-white">
+          <Button size="lg" asChild className="w-full sm:w-auto rounded-full px-8 shadow-lg bg-rose-600 hover:bg-rose-700 text-white">
             <Link href="/register">Buat Undangan Sekarang</Link>
           </Button>
         </div>

@@ -42,13 +42,13 @@ export function HeroSection() {
           </Badge>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6">
             Pusatkan Project Anda di{" "}
             <span className="text-gradient-brand">Satu Subdomain</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-8 leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
             Klaim subdomain kustom premium di{" "}
             <span className="font-semibold text-foreground">upshare.id</span>{" "}
             dan arahkan secara instan ke website Anda yang di-hosting di Netlify, Vercel, atau Github Pages.
@@ -68,13 +68,13 @@ export function HeroSection() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3 sm:gap-4">
             {!mounted || loading ? (
-              <div className="w-48 h-12 bg-muted/30 animate-pulse rounded-lg" />
+              <div className="w-full sm:w-48 h-12 bg-muted/30 animate-pulse rounded-lg" />
             ) : user ? (
               <Button
                 size="lg"
-                className="gradient-brand text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                className="gradient-brand w-full sm:w-auto text-white border-0 shadow-lg hover:opacity-90 hover:scale-[1.02] sm:hover:scale-105 transition-all duration-200 px-8 text-base h-12"
                 asChild
               >
                 <Link href="/dashboard">
@@ -85,7 +85,7 @@ export function HeroSection() {
             ) : (
               <Button
                 size="lg"
-                className="gradient-brand text-white border-0 shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200 px-8 text-base h-12"
+                className="gradient-brand w-full sm:w-auto text-white border-0 shadow-lg hover:opacity-90 hover:scale-[1.02] sm:hover:scale-105 transition-all duration-200 px-8 text-base h-12"
                 asChild
               >
                 <Link href="/register">
@@ -97,7 +97,7 @@ export function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="border-border/60 hover:bg-accent px-8 text-base h-12"
+              className="w-full sm:w-auto border-border/60 hover:bg-accent px-8 text-base h-12"
               asChild
             >
               <Link href="#features">Pelajari Lebih Lanjut</Link>
@@ -113,29 +113,29 @@ export function HeroSection() {
         </div>
 
         {/* Hero Visual - Mock UI */}
-        <div className="mt-16 max-w-4xl mx-auto">
-          <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-border/50">
+        <div className="mt-12 sm:mt-16 max-w-4xl mx-auto w-full">
+          <div className="glass rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-border/50">
             {/* Browser Bar */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border/50">
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-muted/50 border-b border-border/50">
               <div className="flex gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-red-400" />
-                <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                <span className="w-3 h-3 rounded-full bg-green-400" />
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-400" />
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-yellow-400" />
+                <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-green-400" />
               </div>
-              <div className="flex-1 mx-4">
-                <div className="bg-background rounded-md px-3 py-1 text-xs text-muted-foreground flex items-center gap-2 max-w-xs mx-auto">
-                  <span className="w-3 h-3 text-green-500">🔒</span>
-                  cecep.upshare.id
+              <div className="flex-1 mx-2 sm:mx-4 overflow-hidden">
+                <div className="bg-background rounded-md px-2 sm:px-3 py-1 text-[10px] sm:text-xs text-muted-foreground flex items-center justify-center gap-1 sm:gap-2 max-w-xs mx-auto truncate">
+                  <span className="text-green-500 shrink-0">🔒</span>
+                  <span className="truncate">cecep.upshare.id</span>
                 </div>
               </div>
             </div>
             {/* Mock Content */}
-            <div className="p-8 bg-gradient-to-br from-background to-secondary/20 min-h-[240px] flex items-center justify-center">
-              <div className="text-center">
-                <div className="inline-flex items-center gap-4 bg-background px-6 py-3 rounded-full shadow-lg border border-border/50">
-                  <span className="text-foreground font-semibold">cecep.upshare.id</span>
-                  <ArrowRight className="text-primary w-5 h-5" />
-                  <span className="text-muted-foreground font-mono text-sm">cecep-project.netlify.app</span>
+            <div className="p-4 sm:p-8 bg-gradient-to-br from-background to-secondary/20 min-h-[180px] sm:min-h-[240px] flex items-center justify-center">
+              <div className="text-center w-full">
+                <div className="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 bg-background p-4 sm:px-6 sm:py-3 rounded-2xl sm:rounded-full shadow-lg border border-border/50 max-w-full overflow-hidden">
+                  <span className="text-foreground font-semibold truncate max-w-[200px] sm:max-w-none">cecep.upshare.id</span>
+                  <ArrowRight className="text-primary w-5 h-5 rotate-90 sm:rotate-0" />
+                  <span className="text-muted-foreground font-mono text-xs sm:text-sm truncate max-w-[200px] sm:max-w-none">cecep-project.netlify.app</span>
                 </div>
               </div>
             </div>

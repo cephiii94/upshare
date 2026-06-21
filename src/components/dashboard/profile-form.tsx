@@ -97,7 +97,7 @@ export function ProfileForm({ initialName, email }: ProfileFormProps) {
           )}
         </CardContent>
         <CardFooter className="bg-muted/10 pt-6 border-t">
-          <Button type="submit" disabled={loading} className="gradient-brand text-white shadow-md hover:scale-105 transition-all">
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto gradient-brand text-white shadow-md hover:scale-105 transition-all">
             {loading ? "Menyimpan..." : (
               <>
                 <Save className="w-4 h-4 mr-2" />

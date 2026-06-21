@@ -31,10 +31,7 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen flex-col lg:flex-row bg-muted/20">
       <AdminSidebar user={user} profile={profile} />
-      <main className="flex-1 overflow-y-auto">
-        <div className="lg:hidden p-4 border-b bg-background font-bold text-lg">
-          Upshare Admin Panel
-        </div>
+      <main className="flex-1 overflow-y-auto w-full">
         <div className="p-4 sm:p-8">{children}</div>
       </main>
     </div>

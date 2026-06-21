@@ -103,7 +103,7 @@ export function TenantSettingsForm({ tenant }: { tenant: any }) {
             )}
           </div>
         </CardContent>
-        <CardFooter className="bg-muted/10 border-t px-6 py-4 flex justify-end">
+        <CardFooter className="bg-muted/10 border-t p-4 sm:px-6 sm:py-4 flex justify-end">
           <SubmitButton />
         </CardFooter>
       </Card>

@@ -65,41 +65,42 @@ export function FeaturesSection() {
     <section id="features" className="py-20 sm:py-28 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
+          <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-widest mb-2 sm:mb-3">
             Fitur Unggulan
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4 leading-tight">
             Semua yang Anda Butuhkan,{" "}
+            <br className="hidden sm:block" />
             <span className="text-gradient-brand">Dalam Satu Platform</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Upshare dirancang untuk memenuhi kebutuhan profesional modern —
             dari freelancer hingga tim enterprise.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
-                className="group relative p-6 rounded-2xl border border-border/60 bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                className="group relative p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-border/60 bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
               >
                 {/* Icon */}
                 <div
-                  className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${feature.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${feature.bg} mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <Icon className={`w-6 h-6 ${feature.color}`} />
+                  <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${feature.color}`} />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1.5 sm:mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </div>

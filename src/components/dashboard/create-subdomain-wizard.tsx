@@ -170,7 +170,7 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
                     placeholder="nama-proyek-keren" 
                     value={subdomain}
                     onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                    className="rounded-r-none text-right focus-visible:ring-0 focus-visible:ring-offset-0 border-r-0 text-lg h-12"
+                    className="rounded-r-none text-right focus-visible:ring-0 focus-visible:ring-offset-0 border-r-0 text-base sm:text-lg h-12"
                     maxLength={30}
                     required
                   />
@@ -335,14 +335,14 @@ export function CreateSubdomainWizard({ isFree }: { isFree: boolean }) {
                 )}
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between border-t bg-muted/10 p-6">
-              <Button type="button" variant="outline" onClick={handleBack}>
+            <CardFooter className="flex flex-col-reverse sm:flex-row justify-between border-t bg-muted/10 p-4 sm:p-6 gap-3 sm:gap-0">
+              <Button type="button" variant="outline" onClick={handleBack} className="w-full sm:w-auto">
                 Kembali
               </Button>
               <Button 
                 type="submit" 
                 disabled={loading || !subdomainAvailable || subdomain.length < 3 || (category === 'universal' && !targetUrl)} 
-                className="gradient-brand text-white shadow-md"
+                className="w-full sm:w-auto gradient-brand text-white shadow-md"
               >
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Buat Sekarang

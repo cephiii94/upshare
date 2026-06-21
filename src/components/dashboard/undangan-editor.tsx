@@ -27,6 +27,7 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
   
   const [data, setData] = useState(defaultData);
   const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState("mempelai");
   
   // State for Publish Dialog
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
@@ -100,22 +101,22 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-2rem)] gap-6 overflow-hidden rounded-xl border bg-background shadow-lg">
+      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-2rem)] lg:overflow-hidden rounded-xl border bg-background shadow-lg">
         
         {/* KIRI: Editor Form */}
-        <div className="w-1/2 flex flex-col h-full border-r bg-muted/10">
-          <div className="flex items-center justify-between p-4 border-b bg-background">
-            <Button asChild variant="ghost" size="sm">
+        <div className="w-full lg:w-1/2 flex flex-col lg:h-full border-b lg:border-b-0 lg:border-r bg-muted/10">
+          <div className="flex flex-wrap items-center justify-between p-4 border-b bg-background gap-4">
+            <Button asChild variant="ghost" size="sm" className="w-full sm:w-auto">
               <Link href={isDraft ? "/dashboard/undangan/templates" : "/dashboard/subdomains"}>
                 <ArrowLeft className="w-4 h-4 mr-2" /> Kembali
               </Link>
             </Button>
-            <div className="font-semibold text-sm">
+            <div className="font-semibold text-sm w-full sm:w-auto text-center sm:text-left order-first sm:order-none">
               {isDraft ? "Draft Undangan" : `Editor: ${tenant.subdomain}.upshare.id`}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-1 sm:flex-none items-center gap-2 justify-end w-full sm:w-auto">
               {!isDraft && (
-                <Button asChild variant="outline" size="sm" className="hidden lg:flex">
+                <Button asChild variant="outline" size="sm" className="hidden xl:flex">
                   <Link href={`/dashboard/undangan/${tenant.id}/rsvp`}>
                     <Users className="w-4 h-4 mr-2" /> RSVP & Buku Tamu
                   </Link>
@@ -125,7 +126,7 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
                 size="sm" 
                 onClick={handleSave} 
                 disabled={isSaving} 
-                className={isDraft ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-rose-600 hover:bg-rose-700 text-white"}
+                className={isDraft ? "flex-1 sm:flex-none bg-primary hover:bg-primary/90 text-primary-foreground" : "flex-1 sm:flex-none bg-rose-600 hover:bg-rose-700 text-white"}
               >
                 {isSaving ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -139,9 +140,9 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6">
-            <Tabs defaultValue="mempelai" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-6">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 h-auto sm:h-10 gap-2 sm:gap-0">
                 <TabsTrigger value="tema">Tema</TabsTrigger>
                 <TabsTrigger value="mempelai">Mempelai</TabsTrigger>
                 <TabsTrigger value="acara">Acara</TabsTrigger>
@@ -280,8 +281,8 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
         </div>
 
         {/* KANAN: Live Preview */}
-        <div className="w-1/2 bg-slate-900 flex flex-col items-center justify-center p-8 relative">
-          <div className="absolute top-4 left-4 flex items-center gap-2 text-white/50 text-sm font-medium">
+        <div className="w-full lg:w-1/2 bg-slate-900 flex flex-col items-center justify-center p-4 sm:p-8 relative min-h-[600px] lg:min-h-0 lg:h-full">
+          <div className="absolute top-4 left-4 flex items-center gap-2 text-white/50 text-sm font-medium z-10">
             <Smartphone className="w-4 h-4" /> Live Preview
           </div>
           
@@ -293,7 +294,7 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
             </div>
             
             <div className="w-full h-full overflow-y-auto overflow-x-hidden relative no-scrollbar">
-              <TemplateRenderer data={data} subdomain={tenant.subdomain} />
+              <TemplateRenderer data={data} subdomain={tenant.subdomain} activeTab={activeTab} />
             </div>
           </div>
         </div>

@@ -79,15 +79,15 @@ export function PricingSection() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
+          <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-widest mb-2 sm:mb-3">
             Harga Transparan
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4">
             Pilih Paket{" "}
             <span className="text-gradient-brand">yang Tepat</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Mulai gratis, upgrade kapan saja. Tidak ada biaya tersembunyi.
           </p>
         </div>
@@ -97,9 +97,9 @@ export function PricingSection() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ${
+              className={`relative flex flex-col rounded-2xl border p-6 sm:p-8 transition-all duration-300 ${
                 plan.badge
-                  ? "border-primary shadow-xl shadow-primary/10 bg-card scale-[1.02]"
+                  ? "border-primary shadow-xl shadow-primary/10 bg-card md:scale-[1.02]"
                   : "border-border/60 bg-card hover:border-primary/40 hover:shadow-lg"
               }`}
             >
