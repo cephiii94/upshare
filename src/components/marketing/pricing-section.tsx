@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createCheckoutSession } from "@/app/actions/checkout";
@@ -12,16 +12,16 @@ const plans = [
     id: null,
     price: "Rp 0",
     period: "selamanya",
-    description: "Cocok untuk memulai dan mencoba platform Upshare.",
+    description: "Sempurna untuk memulai dan merasakan semua fitur Upshare.",
     badge: null,
     features: [
-      { text: "1 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
+      { text: "1 Subdomain gratis", included: true },
+      { text: "Akses semua mode (Proxy, Undangan, Biolink)", included: true, highlight: true },
+      { text: "+ Add-on subdomain Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
       { text: "Analitik dasar", included: true },
       { text: "Bebas Watermark Upshare", included: false },
-      { text: "Multi-target proxy", included: false },
-      { text: "Prioritas support", included: false },
+      { text: "Template premium & custom tema", included: false },
     ],
     cta: "Mulai Gratis",
     ctaVariant: "outline" as const,
@@ -32,15 +32,15 @@ const plans = [
     id: "pro",
     price: "Rp 49.000",
     period: "per bulan",
-    description: "Untuk profesional yang memiliki beberapa project.",
+    description: "Untuk kreator, UMKM, dan profesional yang butuh lebih.",
     badge: "Paling Populer",
     features: [
       { text: "3 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
+      { text: "Akses semua mode (Proxy, Undangan, Biolink)", included: true, highlight: true },
+      { text: "+ Add-on subdomain Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
-      { text: "Analitik lengkap", included: true },
-      { text: "Bebas Watermark & Custom Tema", included: true },
-      { text: "Multi-target proxy", included: true },
+      { text: "Analitik lengkap (traffic, klik, referral)", included: true },
+      { text: "Bebas Watermark & Template Premium", included: true },
       { text: "Prioritas support", included: false },
     ],
     cta: "Segera Hadir",
@@ -57,11 +57,11 @@ const plans = [
     badge: null,
     features: [
       { text: "10 Subdomain bawaan", included: true },
-      { text: "+ Beli Add-on Rp 10rb/domain", included: true, highlight: true },
+      { text: "Akses semua mode (Proxy, Undangan, Biolink)", included: true, highlight: true },
+      { text: "+ Add-on subdomain Rp 10rb/domain", included: true, highlight: true },
       { text: "SSL (HTTPS) Otomatis", included: true },
-      { text: "Analitik advanced", included: true },
-      { text: "Bebas Watermark & Custom Tema", included: true },
-      { text: "Multi-target proxy", included: true },
+      { text: "Analitik advanced + export data", included: true },
+      { text: "Bebas Watermark & Template Premium", included: true },
       { text: "Prioritas support 24/7", included: true },
     ],
     cta: "Segera Hadir",
@@ -73,10 +73,7 @@ const plans = [
 
 export function PricingSection() {
   return (
-    <section
-      id="pricing"
-      className="py-20 sm:py-28 bg-muted/30"
-    >
+    <section id="pricing" className="py-20 sm:py-28 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
@@ -87,9 +84,14 @@ export function PricingSection() {
             Pilih Paket{" "}
             <span className="text-gradient-brand">yang Tepat</span>
           </h2>
-          <p className="text-muted-foreground text-base sm:text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg mb-4">
             Mulai gratis, upgrade kapan saja. Tidak ada biaya tersembunyi.
           </p>
+          {/* Value highlight */}
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-sm font-medium px-4 py-2 rounded-full">
+            <Sparkles className="w-4 h-4" />
+            Semua paket sudah termasuk akses Proxy, Undangan, Biolink & Landing Page
+          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -141,7 +143,11 @@ export function PricingSection() {
                   return (
                     <li key={feature.text} className="flex items-start gap-2.5">
                       {feature.included ? (
-                        <CheckCircle2 className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isHighlighted ? "text-amber-500" : "text-primary"}`} />
+                        <CheckCircle2
+                          className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                            isHighlighted ? "text-amber-500" : "text-primary"
+                          }`}
+                        />
                       ) : (
                         <X className="w-4 h-4 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
                       )}
@@ -163,10 +169,13 @@ export function PricingSection() {
 
               {/* CTA */}
               {plan.id ? (
-                <form action={async (formData) => {
-                  const res = await createCheckoutSession(formData);
-                  if (res && !res.success) alert(res.error);
-                }} className="w-full">
+                <form
+                  action={async (formData) => {
+                    const res = await createCheckoutSession(formData);
+                    if (res && !res.success) alert(res.error);
+                  }}
+                  className="w-full"
+                >
                   <input type="hidden" name="planId" value={plan.id} />
                   <Button
                     type="submit"

@@ -5,22 +5,16 @@ import Link from "next/link";
 export default function TemplateCatalogPage() {
   const templates = [
     {
+      id: "modern-romance",
+      name: "Modern Romance",
+      image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop",
+      badge: "Gratis"
+    },
+    {
       id: "premium-wedding",
       name: "Premium Elegance",
-      image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop",
-      badge: "Terlaris"
-    },
-    {
-      id: "modern-dark",
-      name: "Modern Dark",
       image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600&auto=format&fit=crop",
-      badge: "Baru"
-    },
-    {
-      id: "rustic-floral",
-      name: "Rustic Floral",
-      image: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?q=80&w=600&auto=format&fit=crop",
-      badge: "Klasik"
+      badge: "Premium"
     }
   ];
 

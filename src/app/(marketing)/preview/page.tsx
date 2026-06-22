@@ -9,16 +9,25 @@ export default async function PreviewPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const resolvedParams = await searchParams;
-  const theme = typeof resolvedParams.theme === "string" ? resolvedParams.theme : "premium-wedding";
+  const theme = typeof resolvedParams.theme === "string" ? resolvedParams.theme : "modern-romance";
 
   // Dummy data untuk keperluan preview
   const dummyData = {
     theme_id: theme,
-    nama_pria: "Andi",
-    nama_wanita: "Sita",
-    tanggal_acara: "2026-12-31T09:00:00Z",
-    lokasi_acara: "Grand Ballroom, Jakarta",
-    cover_url: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000&auto=format&fit=crop"
+    nama_pria: "Romeo",
+    nama_lengkap_pria: "Romeo Adiputra, S.T.",
+    ortu_pria: "Putra dari Bapak & Ibu Adiputra",
+    nama_wanita: "Juliet",
+    nama_lengkap_wanita: "Juliet Maharani, S.E.",
+    ortu_wanita: "Putri dari Bapak & Ibu Maharani",
+    tanggal_akad: "2026-02-14T08:00:00",
+    waktu_akad: "08:00 – 10:00 WIB",
+    lokasi_akad: "Masjid Istiqlal, Jakarta",
+    tanggal_acara: "2026-02-14T11:00:00",
+    waktu_acara: "11:00 WIB – Selesai",
+    lokasi_acara: "Grand Ballroom Hotel Indonesia, Jakarta",
+    maps_url: "https://maps.google.com/?q=Masjid+Istiqlal+Jakarta",
+    cover_url: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000&auto=format&fit=crop",
   };
 
   return (

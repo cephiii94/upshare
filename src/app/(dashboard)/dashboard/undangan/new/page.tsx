@@ -6,7 +6,7 @@ export default async function NewUndanganEditorPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const resolvedParams = await searchParams;
-  const theme = typeof resolvedParams.theme === "string" ? resolvedParams.theme : "premium-wedding";
+  const theme = typeof resolvedParams.theme === "string" ? resolvedParams.theme : "modern-romance";
 
   // Create a "Draft" tenant object
   const draftTenant = {

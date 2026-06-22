@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/marketing/hero-section";
 import { FeaturesSection } from "@/components/marketing/features-section";
+import { HowItWorksSection } from "@/components/marketing/how-it-works-section";
+import { UseCasesSection } from "@/components/marketing/use-cases-section";
 import { PricingSection } from "@/components/marketing/pricing-section";
 import { CTASection } from "@/components/marketing/cta-section";
 import { MarketingNavbar } from "@/components/marketing/navbar";
 import { MarketingFooter } from "@/components/marketing/footer";
 
 export const metadata: Metadata = {
-  title: "Upshare — Kustom Subdomain & Forwarding Platform",
+  title: "Upshare — All-in-One Digital Platform untuk Indonesia",
   description:
-    "Klaim subdomain kustom premium dan arahkan ke website Netlify, Vercel, atau Github Pages Anda secara instan dengan Upshare.",
+    "Satu subdomain untuk segalanya. Buat web proxy, undangan digital, biolink toko online, dan landing page — gratis, tanpa coding, dalam 2 menit.",
 };
 
 export default function HomePage() {
@@ -19,6 +21,8 @@ export default function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <FeaturesSection />
+        <HowItWorksSection />
+        <UseCasesSection />
         <PricingSection />
         <CTASection />
       </main>

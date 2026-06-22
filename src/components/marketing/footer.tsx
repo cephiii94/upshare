@@ -33,7 +33,10 @@ const footerLinks = {
   Produk: [
     { label: "Upshare Proxy", href: "/" },
     { label: "Upshare Undangan", href: "/undangan-premium" },
-    { label: "Fitur Umum", href: "/#features" },
+    { label: "Upshare Biolink", href: "/biolink" },
+
+    { label: "Upshare Landing", href: "/landing" },
+
     { label: "Harga", href: "/#pricing" },
   ],
   Perusahaan: [
@@ -74,8 +77,8 @@ export function MarketingFooter() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-xs">
-              Platform berbagi file profesional dengan subdomain kustom untuk
-              individu dan bisnis di Indonesia.
+              Platform all-in-one untuk membuat web proxy, undangan digital,
+              biolink toko, dan landing page — dengan subdomain kustom di Indonesia.
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3">

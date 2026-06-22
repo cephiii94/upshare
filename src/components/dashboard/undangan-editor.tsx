@@ -23,7 +23,7 @@ import {
 export function UndanganEditor({ tenant }: { tenant: any }) {
   const router = useRouter();
   const isDraft = !tenant.id;
-  const defaultData = tenant.template_data || { theme_id: "premium-wedding" };
+  const defaultData = tenant.template_data || { theme_id: "modern-romance" };
   
   const [data, setData] = useState(defaultData);
   const [isSaving, setIsSaving] = useState(false);
@@ -154,12 +154,11 @@ export function UndanganEditor({ tenant }: { tenant: any }) {
                   <Label>Pilih Tema</Label>
                   <select 
                     className="w-full border rounded-md p-2"
-                    value={data.theme_id || "premium-wedding"}
+                    value={data.theme_id || "modern-romance"}
                     onChange={(e) => handleChange("theme_id", e.target.value)}
                   >
-                    <option value="premium-wedding">Premium Wedding (Elegance)</option>
-                    <option value="tema-minimalis">Minimalist White</option>
-                    <option value="premium-gold">Royal Gold</option>
+                    <option value="modern-romance">Modern Romance (Free Tier / Gratis)</option>
+                    <option value="premium-wedding">Premium Wedding (Premium)</option>
                   </select>
                 </div>
                 <div className="space-y-2">

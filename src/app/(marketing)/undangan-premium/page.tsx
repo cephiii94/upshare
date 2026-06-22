@@ -7,9 +7,9 @@ import { MarketingNavbar } from "@/components/marketing/navbar";
 import { MarketingFooter } from "@/components/marketing/footer";
 
 export const metadata: Metadata = {
-  title: "Upshare Undangan Premium — Link Subdomain Elegan untuk Undangan Digital",
+  title: "Upshare Undangan — Website Pernikahan Digital Lengkap",
   description:
-    "Ubah link undangan pernikahan Netlify/Vercel Anda menjadi nama pasangan. Berikan kesan eksklusif dan mewah saat undangan dibagikan di WhatsApp.",
+    "Buat website pernikahan impian kalian di romeo-dan-juliet.upshare.id. Lengkap dengan countdown, RSVP online, galeri foto, peta lokasi, dan ucapan tamu — gratis, tanpa coding.",
 };
 
 export default function UndanganPremiumPage() {

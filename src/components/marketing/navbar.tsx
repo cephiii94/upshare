@@ -9,8 +9,43 @@ import { useUser } from "@/hooks/use-user";
 
 const navLinks = [
   { label: "Fitur", href: "#features" },
+  { label: "Cara Kerja", href: "#how-it-works" },
   { label: "Harga", href: "#pricing" },
-  { label: "Tentang", href: "#about" },
+];
+
+const products = [
+  {
+    label: "Upshare Proxy",
+    href: "/",
+    desc: "Web proxy & custom subdomain",
+    badge: null,
+    color: "hover:bg-blue-50 dark:hover:bg-blue-950/30",
+    textColor: "text-blue-600 dark:text-blue-400",
+  },
+  {
+    label: "Upshare Undangan",
+    href: "/undangan-premium",
+    desc: "Undangan digital & RSVP",
+    badge: null,
+    color: "hover:bg-rose-50 dark:hover:bg-rose-950/30",
+    textColor: "text-rose-600 dark:text-rose-400",
+  },
+  {
+    label: "Upshare Biolink",
+    href: "/biolink",
+    desc: "Biolink & toko online",
+    badge: null,
+    color: "hover:bg-purple-50 dark:hover:bg-purple-950/30",
+    textColor: "text-purple-600 dark:text-purple-400",
+  },
+  {
+    label: "Upshare Landing",
+    href: "/landing",
+    desc: "Landing page & portofolio",
+    badge: null,
+    color: "hover:bg-amber-50 dark:hover:bg-amber-950/30",
+    textColor: "text-amber-600 dark:text-amber-400",
+  },
 ];
 
 export function MarketingNavbar() {
@@ -38,16 +73,35 @@ export function MarketingNavbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
+            {/* Produk Dropdown */}
             <div className="relative group">
               <button className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent transition-all duration-200 flex items-center gap-1">
                 Produk
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="m6 9 6 6 6-6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:rotate-180 transition-transform duration-200"><path d="m6 9 6 6 6-6" /></svg>
               </button>
-              <div className="absolute top-full left-0 mt-0 w-48 bg-background border border-border/50 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2">
-                <Link href="/" className="block px-4 py-2.5 text-sm hover:bg-accent text-foreground font-medium">Upshare Proxy</Link>
-                <Link href="/undangan-premium" className="block px-4 py-2.5 text-sm hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 font-medium">Upshare Undangan</Link>
+              <div className="absolute top-full left-0 mt-1 w-64 bg-background border border-border/50 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 px-1">
+                {products.map((p) => (
+                  <Link
+                    key={p.label}
+                    href={p.href}
+                    className={`flex items-start gap-3 px-3 py-2.5 rounded-xl transition-all ${p.color}`}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-medium ${p.textColor}`}>{p.label}</span>
+                        {p.badge && (
+                          <span className="text-[10px] font-bold bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
+                            {p.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{p.desc}</p>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -93,20 +147,21 @@ export function MarketingNavbar() {
         {isOpen && (
           <div className="md:hidden border-t border-border/50 py-4 space-y-1">
             <div className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Produk</div>
-            <Link
-              href="/"
-              className="block px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent rounded-lg transition-all"
-              onClick={() => setIsOpen(false)}
-            >
-              Upshare Proxy
-            </Link>
-            <Link
-              href="/undangan-premium"
-              className="block px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-all"
-              onClick={() => setIsOpen(false)}
-            >
-              Upshare Undangan
-            </Link>
+            {products.map((p) => (
+              <Link
+                key={p.label}
+                href={p.href}
+                className={`flex items-center justify-between px-4 py-2.5 text-sm font-medium ${p.textColor} rounded-lg transition-all`}
+                onClick={() => setIsOpen(false)}
+              >
+                <span>{p.label}</span>
+                {p.badge && (
+                  <span className="text-[10px] font-bold bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                    {p.badge}
+                  </span>
+                )}
+              </Link>
+            ))}
             <div className="px-4 py-2 mt-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Lainnya</div>
             {navLinks.map((link) => (
               <Link

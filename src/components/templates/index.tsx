@@ -1,7 +1,5 @@
 import { PremiumWeddingTemplate } from "./premium-wedding";
-
-// CONTOH: Jika Anda sudah membuat file free-minimalist.tsx, uncomment baris di bawah:
-// import { FreeMinimalist } from "./free-minimalist";
+import { ModernRomanceTemplate } from "./modern-romance";
 
 interface TemplateRendererProps {
   data: any;
@@ -12,23 +10,23 @@ interface TemplateRendererProps {
 /**
  * Komponen Koordinator (Registry)
  * Bertugas memilih komponen desain mana yang akan dirender berdasarkan theme_id dari database.
+ *
+ * Template IDs:
+ *  - "modern-romance"   → Free tier (gratis)
+ *  - "premium-wedding"  → Premium (berbayar)
  */
 export function TemplateRenderer({ data, subdomain, activeTab }: TemplateRendererProps) {
-  // Ambil theme_id dari database, jika kosong gunakan "premium-wedding" sebagai default
-  const themeId = data.theme_id || "premium-wedding"; 
-  
+  const themeId = data.theme_id || "modern-romance";
+
   switch (themeId) {
+    case "modern-romance":
+      return <ModernRomanceTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
+
     case "premium-wedding":
       return <PremiumWeddingTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
-      
-    // case "free-minimalist":
-    //   return <FreeMinimalist data={data} subdomain={subdomain} activeTab={activeTab} />;
-      
-    // case "premium-dark-gold":
-    //   return <PremiumDarkGold data={data} subdomain={subdomain} activeTab={activeTab} />;
 
     default:
-      // Fallback ke template default jika theme_id tidak dikenali
-      return <PremiumWeddingTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
+      return <ModernRomanceTemplate data={data} subdomain={subdomain} activeTab={activeTab} />;
   }
 }
+
