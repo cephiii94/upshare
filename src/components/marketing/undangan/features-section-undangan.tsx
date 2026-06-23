@@ -10,46 +10,55 @@ import {
   BarChart3,
   ShieldCheck,
   Sparkles,
+  PartyPopper,
 } from "lucide-react";
 
 const features = [
   {
-    icon: Globe,
-    title: "Subdomain Nama Pasangan",
+    icon: PartyPopper,
+    title: "Semua Jenis Acara",
     description:
-      "romeo-dan-juliet.upshare.id — bukan link panjang dari Canva atau Netlify. Berikan kesan punya website pernikahan sendiri yang eksklusif.",
+      "Bukan hanya pernikahan. Buat undangan digital untuk anniversary, khitanan, aqiqah, ulang tahun, syukuran, dan acara spesial lainnya — dalam satu platform.",
     color: "text-rose-500",
     bg: "bg-rose-50 dark:bg-rose-950/30",
+  },
+  {
+    icon: Globe,
+    title: "Subdomain Nama Acara",
+    description:
+      "nama-acara.upshare.id — bukan link panjang dari Canva atau Netlify. Berikan kesan punya website eksklusif sendiri yang profesional dan mudah diingat.",
+    color: "text-pink-500",
+    bg: "bg-pink-50 dark:bg-pink-950/30",
   },
   {
     icon: Clock,
     title: "Countdown Hari H Real-time",
     description:
-      "Hitung mundur detik demi detik menuju hari pernikahan. Tamu langsung tahu berapa lama lagi momen spesial itu tiba.",
-    color: "text-pink-500",
-    bg: "bg-pink-50 dark:bg-pink-950/30",
+      "Hitung mundur detik demi detik menuju momen spesialmu. Tamu langsung tahu berapa lama lagi acara yang ditunggu-tunggu itu tiba.",
+    color: "text-amber-500",
+    bg: "bg-amber-50 dark:bg-amber-950/30",
   },
   {
     icon: Users,
     title: "RSVP Online Langsung",
     description:
-      "Tamu bisa konfirmasi kehadiran langsung dari halaman undangan — tanpa perlu chat WA satu per satu. Semua data masuk ke dashboard.",
+      "Tamu konfirmasi kehadiran langsung dari halaman undangan — tanpa perlu chat WA satu per satu. Semua data masuk ke dashboardmu secara real-time.",
     color: "text-purple-500",
     bg: "bg-purple-50 dark:bg-purple-950/30",
   },
   {
     icon: Camera,
-    title: "Galeri Foto Pasangan",
+    title: "Galeri Momen",
     description:
-      "Tampilkan momen terbaik prewedding atau foto favorit kalian berdua. Buat tamu semakin antusias datang ke pernikahan.",
-    color: "text-amber-500",
-    bg: "bg-amber-50 dark:bg-amber-950/30",
+      "Tampilkan foto-foto terbaik terkait acaramu — prewedding, foto keluarga, atau momen seru lainnya. Buat tamu semakin antusias untuk hadir.",
+    color: "text-teal-500",
+    bg: "bg-teal-50 dark:bg-teal-950/30",
   },
   {
     icon: MapPin,
     title: "Peta Lokasi Terintegrasi",
     description:
-      "Lokasi akad dan resepsi lengkap dengan Google Maps embed. Tidak ada lagi tamu yang nyasar atau salah tujuan.",
+      "Lokasi acara dilengkapi Google Maps embed. Tidak ada lagi tamu yang nyasar atau salah tujuan — cukup klik, langsung dapat petunjuk arah.",
     color: "text-green-600",
     bg: "bg-green-50 dark:bg-green-950/30",
   },
@@ -57,7 +66,7 @@ const features = [
     icon: MessageCircle,
     title: "Ucapan & Doa Tamu",
     description:
-      "Buka kolom ucapan agar tamu bisa menitipkan doa dan pesan hangat. Kenangan yang bisa dibaca ulang kapan saja.",
+      "Buka kolom ucapan agar tamu bisa menitipkan doa dan pesan hangat. Kenangan digital yang bisa dibaca ulang kapan saja dan oleh siapa saja.",
     color: "text-sky-500",
     bg: "bg-sky-50 dark:bg-sky-950/30",
   },
@@ -65,7 +74,7 @@ const features = [
     icon: Sparkles,
     title: "Thumbnail WA yang Cantik",
     description:
-      "Saat link dibagikan di WhatsApp, muncul preview gambar pasangan, nama, dan tanggal — bukan link kosong tanpa preview.",
+      "Saat link dibagikan di WhatsApp, muncul preview dengan foto, nama acara, dan tanggal — bukan link kosong tanpa preview yang terlihat tidak profesional.",
     color: "text-fuchsia-500",
     bg: "bg-fuchsia-50 dark:bg-fuchsia-950/30",
   },
@@ -73,7 +82,7 @@ const features = [
     icon: BarChart3,
     title: "Analitik Tamu Real-time",
     description:
-      "Pantau berapa kali link undangan dibuka, berapa tamu yang RSVP, dan dari kota mana saja tamu kalian berasal.",
+      "Pantau berapa kali link undangan dibuka, berapa tamu yang sudah RSVP, dan dari kota mana saja tamu kamu berasal — semua dalam satu dashboard.",
     color: "text-emerald-500",
     bg: "bg-emerald-50 dark:bg-emerald-950/30",
   },
@@ -81,7 +90,7 @@ const features = [
     icon: ShieldCheck,
     title: "SSL & Aktif Selamanya",
     description:
-      "Link undangan kamu HTTPS dan tetap bisa diakses setelah hari H — sebagai kenangan digital pernikahan kalian.",
+      "Link undangan HTTPS dan tetap bisa diakses lama setelah hari H berlalu — sebagai kenangan digital acaramu yang abadi.",
     color: "text-blue-500",
     bg: "bg-blue-50 dark:bg-blue-950/30",
   },
@@ -103,18 +112,22 @@ export function FeaturesSectionUndangan() {
             </span>
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg">
-            Upshare Undangan adalah website pernikahan lengkap — bukan hanya redirect link, tapi pengalaman undangan yang berkesan.
+            Upshare Undangan adalah website acara lengkap — bukan hanya redirect link, tapi pengalaman undangan digital yang berkesan untuk semua jenis momen spesial.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {features.map((feature) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
+          {/* First feature spans 2 columns on xl to give it prominence */}
+          {features.map((feature, idx) => {
             const Icon = feature.icon;
+            const isFirst = idx === 0;
             return (
               <div
                 key={feature.title}
-                className="group p-6 rounded-2xl border border-border/60 bg-card hover:border-rose-400/40 hover:shadow-lg hover:shadow-rose-500/5 transition-all duration-300 hover:-translate-y-0.5"
+                className={`group p-6 rounded-2xl border border-border/60 bg-card hover:border-rose-400/40 hover:shadow-lg hover:shadow-rose-500/5 transition-all duration-300 hover:-translate-y-0.5 ${
+                  isFirst ? "sm:col-span-2 lg:col-span-3 xl:col-span-2" : ""
+                }`}
               >
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${feature.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className={`w-6 h-6 ${feature.color}`} />
