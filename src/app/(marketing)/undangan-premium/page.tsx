@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { HeroSectionUndangan } from "@/components/marketing/undangan/hero-section-undangan";
 import { FeaturesSectionUndangan } from "@/components/marketing/undangan/features-section-undangan";
 import { TemplatePreviewSection } from "@/components/marketing/undangan/template-preview-section";
-import { PricingSectionUndangan } from "@/components/marketing/undangan/pricing-section-undangan";
+
 import { CTASection } from "@/components/marketing/cta-section";
 import { MarketingNavbar } from "@/components/marketing/navbar";
 import { MarketingFooter } from "@/components/marketing/footer";
@@ -21,7 +21,7 @@ export default function UndanganPremiumPage() {
         <HeroSectionUndangan />
         <FeaturesSectionUndangan />
         <TemplatePreviewSection />
-        <PricingSectionUndangan />
+
         <CTASection />
       </main>
       <MarketingFooter />
