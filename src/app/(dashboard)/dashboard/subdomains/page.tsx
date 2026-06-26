@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeleteSubdomainButton } from "@/components/dashboard/delete-subdomain-button";
+import { BuyAddonButton } from "@/components/dashboard/buy-addon-button";
+import Script from "next/script";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,7 +66,7 @@ export default async function SubdomainsPage() {
             </CardTitle>
             <CardDescription className="text-xs flex flex-col gap-0.5 mt-1">
               <span>Dibuat pada {new Date(tenant.created_at).toLocaleDateString("id-ID")}</span>
-              {tenant.expires_at && (
+              {tenant.is_active && tenant.expires_at && (
                 <span className="text-amber-600 font-semibold text-[11px]">
                   Exp: {new Date(tenant.expires_at).toLocaleDateString("id-ID")}
                 </span>
@@ -88,17 +90,7 @@ export default async function SubdomainsPage() {
            />
           <div className="flex flex-wrap gap-2 justify-end">
             {tenant.is_addon && (
-              <form action={async () => {
-                "use server";
-                const { buyAddonDomain } = await import("@/app/actions/checkout");
-                const formData = new FormData();
-                formData.set("tenant_id", tenant.id);
-                await buyAddonDomain(formData);
-              }}>
-                <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm h-8 text-xs">
-                  {tenant.is_active ? "Perpanjang" : "Aktifkan"} (Rp 10rb)
-                </Button>
-              </form>
+              <BuyAddonButton tenantId={tenant.id} isActive={tenant.is_active} />
             )}
             {!tenant.is_active && !tenant.is_addon && (
               <form action={async () => {
@@ -161,7 +153,7 @@ export default async function SubdomainsPage() {
             </CardTitle>
             <CardDescription className="text-xs flex flex-col gap-0.5 mt-1">
               <span>Dibuat pada {new Date(tenant.created_at).toLocaleDateString("id-ID")}</span>
-              {tenant.expires_at && (
+              {tenant.is_active && tenant.expires_at && (
                 <span className="text-amber-600 font-semibold text-[11px]">
                   Exp: {new Date(tenant.expires_at).toLocaleDateString("id-ID")}
                 </span>
@@ -192,17 +184,7 @@ export default async function SubdomainsPage() {
            />
            <div className="flex flex-wrap gap-2 justify-end">
              {tenant.is_addon && (
-               <form action={async () => {
-                 "use server";
-                 const { buyAddonDomain } = await import("@/app/actions/checkout");
-                 const formData = new FormData();
-                 formData.set("tenant_id", tenant.id);
-                 await buyAddonDomain(formData);
-               }}>
-                 <Button type="submit" size="sm" className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm h-8 text-xs">
-                   {tenant.is_active ? "Perpanjang" : "Aktifkan"} (Rp 10rb)
-                 </Button>
-               </form>
+               <BuyAddonButton tenantId={tenant.id} isActive={tenant.is_active} />
              )}
              {!tenant.is_active && !tenant.is_addon && (
                <form action={async () => {
@@ -230,7 +212,11 @@ export default async function SubdomainsPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
+      <Script 
+        src={process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === 'true' ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'}
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+        strategy="lazyOnload"
+      />
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">

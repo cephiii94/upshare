@@ -1,10 +1,11 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-// Mengecek apakah kredensial ada untuk menghindari crash jika environment variables belum diset
+// Mengecek apakah kredensial ada dan bukan nilai default/placeholder
 const hasRedisCredentials = 
   !!process.env.UPSTASH_REDIS_REST_URL && 
-  !!process.env.UPSTASH_REDIS_REST_TOKEN;
+  !!process.env.UPSTASH_REDIS_REST_TOKEN &&
+  !process.env.UPSTASH_REDIS_REST_URL.includes("[YOUR-REGION]");
 
 // Membuat instance Redis jika kredensial tersedia
 const redis = hasRedisCredentials 

@@ -31,17 +31,9 @@ export default async function NewSubdomainPage() {
   const isPro = subscription?.status === "active";
   const hasUnlimited = isAdmin || isPro;
 
-  if (!hasUnlimited) {
-    // Jika tidak unlimited, cek apakah sudah punya 1 subdomain
-    const { data: existingTenants } = await supabase
-      .from("tenants")
-      .select("id")
-      .eq("user_id", user.id);
-      
-    if (existingTenants && existingTenants.length >= 1) {
-      redirect("/dashboard/subdomains");
-    }
-  }
+  // Kita tidak lagi me-redirect pengguna yang tidak "hasUnlimited".
+  // Karena sekarang pengguna diperbolehkan membuat lebih dari kuota (yang akan otomatis menjadi Add-on).
+  // Logika kuota ditangani secara aman di backend (tenant.ts -> claimSubdomain).
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">

@@ -2,8 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { createPaymentLink } from "@/lib/mayar/client";
+import { createSnapTransaction } from "@/lib/midtrans/client";
 import { safeAction } from "@/lib/safe-action";
+import crypto from "crypto";
 
 export const createCheckoutSession = safeAction(async (formData: FormData) => {
   const planId = formData.get("planId") as "pro" | "business";
@@ -31,37 +32,36 @@ export const createCheckoutSession = safeAction(async (formData: FormData) => {
 
   // Set harga dan deskripsi
   let amount = 0;
-  let name = "";
-  let description = "";
+  let itemName = "";
 
   if (planId === "pro") {
     amount = 50000;
-    name = "Paket Pro Upshare";
-    description = "Langganan Paket Pro selama 1 Bulan";
+    itemName = "Paket Pro Upshare";
   } else if (planId === "business") {
     amount = 150000;
-    name = "Paket Business Upshare";
-    description = "Langganan Paket Business selama 1 Bulan";
+    itemName = "Paket Business Upshare";
   }
 
-  // Buat link pembayaran
-  const paymentUrl = await createPaymentLink({
-    name,
-    description,
+  const orderId = `SUB-${user.id.substring(0, 8)}-${Date.now()}`;
+
+  // Buat snap token
+  const snapToken = await createSnapTransaction({
+    orderId,
+    itemName,
     amount,
     customerName,
     customerEmail,
     userId: user.id,
     planId,
+    type: "subscription"
   });
 
-  if (!paymentUrl) {
+  if (!snapToken) {
     return { success: false, error: "Gagal membuat sesi pembayaran. Silakan coba lagi nanti." };
   }
 
-  // Redirect user ke halaman checkout Mayar
-  // Redirect ini akan melempar 'NEXT_REDIRECT' yang akan dilewatkan dengan aman oleh safeAction
-  redirect(paymentUrl);
+  // Mengembalikan token ke klien untuk membuka pop-up
+  return { success: true, data: { snapToken } };
 });
 
 export const buyAddonDomain = safeAction(async (formData: FormData) => {
@@ -102,13 +102,14 @@ export const buyAddonDomain = safeAction(async (formData: FormData) => {
 
   // Set harga dan deskripsi untuk Addon
   const amount = 10000;
-  const name = `Add-on Domain: ${tenant.subdomain}.upshare.id`;
-  const description = `Aktivasi/Perpanjangan Add-on Domain selama 30 Hari`;
+  const itemName = `Add-on Domain: ${tenant.subdomain}.upshare.id`;
 
-  // Buat link pembayaran
-  const paymentUrl = await createPaymentLink({
-    name,
-    description,
+  const orderId = `ADDON-${tenantId.substring(0, 8)}-${Date.now()}`;
+
+  // Buat snap token
+  const snapToken = await createSnapTransaction({
+    orderId,
+    itemName,
     amount,
     customerName,
     customerEmail,
@@ -117,9 +118,9 @@ export const buyAddonDomain = safeAction(async (formData: FormData) => {
     tenantId,
   });
 
-  if (!paymentUrl) {
+  if (!snapToken) {
     return { success: false, error: "Gagal membuat sesi pembayaran. Silakan coba lagi nanti." };
   }
 
-  redirect(paymentUrl);
+  return { success: true, data: { snapToken } };
 });

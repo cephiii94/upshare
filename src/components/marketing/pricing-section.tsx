@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Script from "next/script";
 import { CheckCircle2, X, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createCheckoutSession } from "@/app/actions/checkout";
@@ -74,6 +76,11 @@ const plans = [
 export function PricingSection() {
   return (
     <section id="pricing" className="py-20 sm:py-28 bg-muted/30 scroll-mt-20">
+      <Script 
+        src={process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === 'true' ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'}
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+        strategy="lazyOnload"
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
@@ -180,7 +187,27 @@ export function PricingSection() {
                 <form
                   action={async (formData) => {
                     const res = await createCheckoutSession(formData);
-                    if (res && !res.success) alert(res.error);
+                    if (res && res.success && res.data?.snapToken) {
+                      // Trigger Midtrans Snap
+                      // @ts-ignore
+                      window.snap.pay(res.data.snapToken, {
+                        onSuccess: function(result: any) {
+                          toast.success("Pembayaran berhasil!", { description: "Sedang mengarahkan..." });
+                          setTimeout(() => window.location.href = '/dashboard', 1500);
+                        },
+                        onPending: function(result: any) {
+                          toast.info("Menunggu pembayaran Anda!");
+                        },
+                        onError: function(result: any) {
+                          toast.error("Pembayaran gagal!");
+                        },
+                        onClose: function() {
+                          console.log('Customer closed the popup without finishing the payment');
+                        }
+                      });
+                    } else if (res && !res.success) {
+                      toast.error(res.error);
+                    }
                   }}
                   className="w-full"
                 >
