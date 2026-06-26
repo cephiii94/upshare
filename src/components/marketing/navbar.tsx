@@ -6,12 +6,7 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
-
-const navLinks = [
-  { label: "Fitur", href: "#features" },
-  { label: "Cara Kerja", href: "#how-it-works" },
-  { label: "Harga", href: "#pricing" },
-];
+import { usePathname } from "next/navigation";
 
 const products = [
   {
@@ -49,6 +44,7 @@ const products = [
 ];
 
 export function MarketingNavbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { user, loading } = useUser();
@@ -56,6 +52,30 @@ export function MarketingNavbar() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Tentukan navLinks dinamis berdasarkan halaman saat ini
+  let activeLinks = [
+    { label: "Fitur", href: "#features" },
+    { label: "Cara Kerja", href: "#how-it-works" },
+    { label: "Harga", href: "#pricing" },
+  ];
+
+  if (pathname === "/undangan-premium") {
+    activeLinks = [
+      { label: "Fitur", href: "#features" },
+      { label: "Cara Kerja", href: "#templates" },
+    ];
+  } else if (pathname === "/biolink") {
+    activeLinks = [
+      { label: "Fitur", href: "#features" },
+      { label: "Cara Kerja", href: "#showcase" },
+    ];
+  } else if (pathname === "/landing") {
+    activeLinks = [
+      { label: "Fitur", href: "#features" },
+      { label: "Cara Kerja", href: "#showcase" },
+    ];
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full glass border-b border-border/50">
@@ -102,7 +122,7 @@ export function MarketingNavbar() {
               </div>
             </div>
 
-            {navLinks.map((link) => (
+            {activeLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -163,7 +183,7 @@ export function MarketingNavbar() {
               </Link>
             ))}
             <div className="px-4 py-2 mt-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Lainnya</div>
-            {navLinks.map((link) => (
+            {activeLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

@@ -73,7 +73,7 @@ const plans = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-20 sm:py-28 bg-muted/30">
+    <section id="pricing" className="py-20 sm:py-28 bg-muted/30 scroll-mt-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
@@ -125,15 +125,23 @@ export function PricingSection() {
               </div>
 
               {/* Price */}
-              <div className="mb-6">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-foreground">
-                    {plan.price}
+              <div className="mb-6 min-h-[60px] flex flex-col justify-center">
+                {plan.disabled ? (
+                  <span className="text-lg font-semibold text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-lg w-fit">
+                    Segera Hadir
                   </span>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {plan.period}
-                </span>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold text-foreground">
+                        {plan.price}
+                      </span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {plan.period}
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Features */}

@@ -43,7 +43,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 sm:py-28 bg-muted/20">
+    <section id="how-it-works" className="py-20 sm:py-28 bg-muted/20 scroll-mt-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">

@@ -132,11 +132,21 @@ export async function proxy(req: NextRequest) {
               }
 
               const watermarkHtml = `
-                <div style="position: fixed; bottom: 16px; right: 16px; background-color: rgba(255, 255, 255, 0.95); padding: 8px 14px; border-radius: 99px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 2147483647; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; gap: 8px; border: 1px solid #fce7f3; backdrop-filter: blur(8px);">
+                <div id="upshare-watermark" style="position: fixed; bottom: 16px; right: 16px; background-color: rgba(255, 255, 255, 0.95); padding: 8px 10px 8px 14px; border-radius: 99px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 2147483647; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; gap: 8px; border: 1px solid #fce7f3; backdrop-filter: blur(8px);">
                   <span style="font-size: 14px;">⚡</span>
-                  <a href="${watermarkLink}" target="_blank" style="text-decoration: none; color: #e11d48; font-weight: 600; font-size: 13px;">
+                  <a href="${watermarkLink}" target="_blank" style="text-decoration: none; color: #e11d48; font-weight: 600; font-size: 13px; white-space: nowrap;">
                     ${watermarkText}
                   </a>
+                  <button onclick="document.getElementById('upshare-watermark').remove();" 
+                          onmouseover="this.style.color='#e11d48'; this.style.backgroundColor='#fff1f2';" 
+                          onmouseout="this.style.color='#9ca3af'; this.style.backgroundColor='transparent';" 
+                          style="background: transparent; border: none; padding: 4px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #9ca3af; transition: all 0.2s; margin-left: 2px; outline: none; width: 22px; height: 22px;" 
+                          aria-label="Tutup watermark">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
                 </div>
               `;
               if (html.includes('</body>')) {

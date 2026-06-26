@@ -98,15 +98,23 @@ export function PricingSectionUndangan() {
               </div>
 
               {/* Price */}
-              <div className="mb-6 pb-6 border-b border-border/50">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-foreground">
-                    {plan.price}
+              <div className="mb-6 pb-6 border-b border-border/50 min-h-[85px] flex flex-col justify-center">
+                {plan.disabled ? (
+                  <span className="text-lg font-semibold text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-lg w-fit">
+                    Segera Hadir
                   </span>
-                </div>
-                <span className="text-sm font-medium text-rose-600 dark:text-rose-400 mt-1 block">
-                  {plan.period}
-                </span>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold text-foreground">
+                        {plan.price}
+                      </span>
+                    </div>
+                    <span className="text-sm font-medium text-rose-600 dark:text-rose-400 mt-1 block">
+                      {plan.period}
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Features */}

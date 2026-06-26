@@ -9,7 +9,7 @@ import { MarketingNavbar } from "@/components/marketing/navbar";
 import { MarketingFooter } from "@/components/marketing/footer";
 
 export const metadata: Metadata = {
-  title: "Upshare — All-in-One Digital Platform untuk Indonesia",
+  title: "Upshare — Your Page, Shared.",
   description:
     "Satu subdomain untuk segalanya. Buat web proxy, undangan digital, biolink toko online, dan landing page — gratis, tanpa coding, dalam 2 menit.",
 };

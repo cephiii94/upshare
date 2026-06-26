@@ -395,7 +395,7 @@ export function HeroSection() {
               className="mb-6 gap-1.5 px-4 py-1.5 text-sm font-medium border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              All-in-One Digital Platform
+              Upshare — Your Page, Shared. ✨
             </Badge>
 
             {/* Headline */}

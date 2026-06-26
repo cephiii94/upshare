@@ -188,6 +188,7 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
   const isAdmin = profile?.is_admin || false;
   const isPro = subscription?.status === "active" && subscription?.plan === "pro";
   const isBusiness = subscription?.status === "active" && subscription?.plan === "business";
+  const isPaying = isAdmin || isPro || isBusiness;
 
   let maxBaseDomains = 1;
   if (isPro) maxBaseDomains = 3;
@@ -204,6 +205,30 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
     return { success: false, error: "Subdomain ini sudah digunakan orang lain. Silakan pilih nama lain." };
   }
 
+  // Tentukan status aktif awal dan expired
+  let initialActive = false;
+  let initialExpiresAt: string | null = null;
+
+  if (isOverQuota) {
+    // Add-on domain: perlu pembayaran
+    initialActive = false;
+  } else {
+    if (isPaying) {
+      // Pro/Business/Admin: Otomatis Aktif
+      initialActive = true;
+    } else {
+      // Free Tier: Manual Activation (Mulai tidak aktif)
+      initialActive = false;
+    }
+  }
+
+  if (initialActive) {
+    // Semua tipe produk (Undangan, Proxy, Landing, dll.) memiliki masa aktif 1 tahun
+    const oneYearLater = new Date();
+    oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+    initialExpiresAt = oneYearLater.toISOString();
+  }
+
   // Klaim subdomain baru beserta pengaturannya
   const { data: newTenant, error } = await supabase
     .from("tenants")
@@ -213,8 +238,9 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
       category: category,
       target_url: target_url || null,
       template_data: parsedTemplateData,
-      is_active: !isOverQuota,
+      is_active: initialActive,
       is_addon: isOverQuota,
+      expires_at: initialExpiresAt,
     })
     .select("id")
     .single();
@@ -235,7 +261,15 @@ export const claimSubdomain = safeAction(async (formData: FormData) => {
     };
   }
 
-  return { success: true, message: "Subdomain berhasil dibuat!", data: { id: newTenant.id, requirePayment: false } };
+  if (!initialActive) {
+    return { 
+      success: true, 
+      message: "Subdomain berhasil dibuat! Silakan aktifkan proyek Anda di dashboard.", 
+      data: { id: newTenant.id, requirePayment: false } 
+    };
+  }
+
+  return { success: true, message: "Subdomain berhasil dibuat dan aktif!", data: { id: newTenant.id, requirePayment: false } };
 });
 
 const DeleteSubdomainSchema = z.object({
@@ -282,4 +316,92 @@ export const deleteSubdomain = safeAction(async (formData: FormData) => {
   revalidatePath("/dashboard/subdomains");
 
   return { success: true, message: "Subdomain berhasil dihapus." };
+});
+
+export const activateSubdomain = safeAction(async (formData: FormData) => {
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+  const { success: rateLimitSuccess } = await tenantRateLimit.limit(ip);
+  if (!rateLimitSuccess) {
+    return { success: false, error: "Terlalu banyak permintaan. Silakan coba beberapa saat lagi." };
+  }
+
+  const tenantId = formData.get("tenant_id") as string;
+  if (!tenantId) {
+    return { success: false, error: "ID Subdomain tidak ditemukan." };
+  }
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  // Cek kepemilikan tenant
+  const { data: tenant, error: fetchError } = await supabase
+    .from("tenants")
+    .select("*")
+    .eq("id", tenantId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError || !tenant) {
+    return { success: false, error: "Subdomain tidak ditemukan atau bukan milik Anda." };
+  }
+
+  if (tenant.is_addon) {
+    return { success: false, error: "Domain Add-on memerlukan pembayaran untuk aktivasi." };
+  }
+
+  // Ambil data profil/langganan untuk mengecek status tier
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single();
+
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("plan, status")
+    .eq("user_id", user.id)
+    .single();
+
+  const isAdmin = profile?.is_admin || false;
+  const isPro = subscription?.status === "active" && subscription?.plan === "pro";
+  const isBusiness = subscription?.status === "active" && subscription?.plan === "business";
+  const isPaying = isAdmin || isPro || isBusiness;
+
+  // Jika user di tier gratis, pastikan dia hanya memiliki 1 active base subdomain
+  if (!isPaying) {
+    // Matikan semua active base subdomain milik user ini sebelum mengaktifkan yang baru
+    await supabase
+      .from("tenants")
+      .update({ is_active: false })
+      .eq("user_id", user.id)
+      .eq("is_addon", false)
+      .eq("is_active", true);
+  }
+
+  // Semua produk disamakan kedaluwarsa 1 tahun dari waktu aktivasi
+  const oneYearLater = new Date();
+  oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+  const expiresAt = oneYearLater.toISOString();
+
+  const { error: updateError } = await supabase
+    .from("tenants")
+    .update({
+      is_active: true,
+      expires_at: expiresAt,
+    })
+    .eq("id", tenantId);
+
+  if (updateError) {
+    console.error("Error activating subdomain:", updateError);
+    return { success: false, error: "Gagal mengaktifkan subdomain." };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/subdomains");
+
+  return { success: true, message: "Subdomain berhasil diaktifkan!" };
 });

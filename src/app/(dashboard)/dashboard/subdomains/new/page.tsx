@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { CreateSubdomainWizard } from "@/components/dashboard/create-subdomain-wizard";
-import { Settings, ArrowLeft } from "lucide-react";
+import { Globe, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -56,12 +56,12 @@ export default async function NewSubdomainPage() {
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
-              <Settings className="h-6 w-6 text-primary" />
+              <Globe className="h-6 w-6 text-primary" />
             </div>
-            Klaim Subdomain Baru
+            Klaim Subdomain Proxy Baru
           </h1>
           <p className="text-muted-foreground mt-1 text-lg">
-            Klaim subdomain kustom tambahan Anda.
+            Klaim subdomain kustom Anda untuk diarahkan (proxy) ke hosting eksternal Anda.
           </p>
         </div>
       </div>

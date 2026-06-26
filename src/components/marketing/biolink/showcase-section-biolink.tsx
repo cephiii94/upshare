@@ -90,7 +90,7 @@ export function BiolinkShowcaseSection() {
   const ProfileIcon = current.profileIcon;
 
   return (
-    <section className="py-20 sm:py-28 bg-muted/20 relative overflow-hidden">
+    <section id="showcase" className="py-20 sm:py-28 bg-muted/20 relative overflow-hidden scroll-mt-20">
       {/* Background */}
       <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent" />
       <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />

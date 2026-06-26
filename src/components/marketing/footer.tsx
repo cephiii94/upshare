@@ -77,8 +77,8 @@ export function MarketingFooter() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-xs">
-              Platform all-in-one untuk membuat web proxy, undangan digital,
-              biolink toko, dan landing page — dengan subdomain kustom di Indonesia.
+              <strong>Upshare — Your Page, Shared.</strong> Platform all-in-one untuk membuat web proxy, undangan digital,
+              biolink toko, dan landing page dengan subdomain kustom gratis.
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3">
