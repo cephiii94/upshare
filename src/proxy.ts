@@ -132,21 +132,22 @@ export async function proxy(req: NextRequest) {
               }
 
               const watermarkHtml = `
-                <div id="upshare-watermark" style="position: fixed; bottom: 16px; right: 16px; background-color: rgba(255, 255, 255, 0.95); padding: 8px 10px 8px 14px; border-radius: 99px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 2147483647; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; gap: 8px; border: 1px solid #fce7f3; backdrop-filter: blur(8px);">
-                  <span style="font-size: 14px;">⚡</span>
-                  <a href="${watermarkLink}" target="_blank" style="text-decoration: none; color: #e11d48; font-weight: 600; font-size: 13px; white-space: nowrap;">
+                <div id="upshare-watermark" style="position: fixed !important; bottom: 16px !important; right: 16px !important; background-color: rgba(255, 255, 255, 0.95) !important; padding: 8px 10px 8px 14px !important; border-radius: 99px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; z-index: 2147483647 !important; font-family: system-ui, -apple-system, sans-serif !important; display: flex !important; align-items: center !important; gap: 8px !important; border: 1px solid #fce7f3 !important; backdrop-filter: blur(8px) !important; width: auto !important; height: auto !important; opacity: 1 !important; visibility: visible !important;">
+                  <span style="font-size: 14px !important; display: inline !important;">⚡</span>
+                  <a href="${watermarkLink}" target="_blank" style="text-decoration: none !important; color: #e11d48 !important; font-weight: 600 !important; font-size: 13px !important; white-space: nowrap !important; display: inline-block !important; font-family: system-ui, -apple-system, sans-serif !important;">
                     ${watermarkText}
                   </a>
-                  <button onclick="document.getElementById('upshare-watermark').remove();" 
-                          onmouseover="this.style.color='#e11d48'; this.style.backgroundColor='#fff1f2';" 
-                          onmouseout="this.style.color='#9ca3af'; this.style.backgroundColor='transparent';" 
-                          style="background: transparent; border: none; padding: 4px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #9ca3af; transition: all 0.2s; margin-left: 2px; outline: none; width: 22px; height: 22px;" 
-                          aria-label="Tutup watermark">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                  <span onclick="document.getElementById('upshare-watermark').remove();" 
+                        onmouseover="this.style.color='#e11d48'; this.style.backgroundColor='#fff1f2';" 
+                        onmouseout="this.style.color='#9ca3af'; this.style.backgroundColor='transparent';" 
+                        style="background: transparent !important; border: none !important; padding: 0 !important; margin: 0 0 0 2px !important; border-radius: 50% !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; color: #9ca3af !important; transition: all 0.2s !important; outline: none !important; width: 22px !important; height: 22px !important; min-width: 22px !important; min-height: 22px !important; max-width: 22px !important; max-height: 22px !important; box-sizing: border-box !important;" 
+                        role="button"
+                        aria-label="Tutup watermark">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block !important; width: 12px !important; height: 12px !important; min-width: 12px !important; min-height: 12px !important; stroke: currentColor !important; fill: none !important; margin: 0 !important; padding: 0 !important;">
+                      <line x1="18" y1="6" x2="6" y2="18" style="stroke: currentColor !important;"></line>
+                      <line x1="6" y1="6" x2="18" y2="18" style="stroke: currentColor !important;"></line>
                     </svg>
-                  </button>
+                  </span>
                 </div>
               `;
               if (html.includes('</body>')) {
