@@ -112,8 +112,8 @@ export async function POST(req: NextRequest) {
     }
 
     const now = new Date();
-    const nextMonth = new Date();
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    const nextPeriod = new Date();
+    nextPeriod.setMonth(nextPeriod.getMonth() + 1); // Masa aktif 1 bulan untuk semua paket (Pro & Business)
 
     const { error: subError } = await supabaseAdmin
       .from("subscriptions")
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
         plan: planId,
         status: "active",
         current_period_start: now.toISOString(),
-        current_period_end: nextMonth.toISOString(),
+        current_period_end: nextPeriod.toISOString(),
       }, { onConflict: "user_id" });
 
     if (subError) {
