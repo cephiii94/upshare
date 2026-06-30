@@ -126,10 +126,15 @@ export function MarketingFooter() {
 
         <Separator className="mb-6" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {currentYear} Brich Digital. Hak Cipta Dilindungi.
-          </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex flex-col items-center sm:items-start gap-0.5">
+            <p className="text-sm font-medium text-foreground">
+              Upshare.id
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Powered by <strong className="text-muted-foreground">Brich Digital</strong> · © {currentYear} Hak Cipta Dilindungi
+            </p>
+          </div>
           <p className="text-sm text-muted-foreground">
             Dibuat dengan ❤️ di Indonesia
           </p>
