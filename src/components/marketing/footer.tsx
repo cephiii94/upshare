@@ -44,10 +44,12 @@ const footerLinks = {
     { label: "Blog", href: "/blog" },
     { label: "Karir", href: "/careers" },
     { label: "Kontak", href: "/contact" },
+    { label: "FAQ", href: "/faq" },
   ],
   Legal: [
     { label: "Kebijakan Privasi", href: "/privacy" },
     { label: "Syarat & Ketentuan", href: "/terms" },
+    { label: "Kebijakan Pengembalian Dana", href: "/refund" },
     { label: "Cookie Policy", href: "/cookies" },
   ],
 };
@@ -126,7 +128,7 @@ export function MarketingFooter() {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Upshare. Hak Cipta Dilindungi.
+            © {currentYear} Brich Digital. Hak Cipta Dilindungi.
           </p>
           <p className="text-sm text-muted-foreground">
             Dibuat dengan ❤️ di Indonesia

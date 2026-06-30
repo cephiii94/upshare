@@ -45,8 +45,7 @@ const plans = [
       { text: "Bebas Watermark & Template Premium", included: true },
       { text: "Prioritas support", included: false },
     ],
-    cta: "Segera Hadir",
-    disabled: true,
+    cta: "Pilih Paket",
     ctaVariant: "default" as const,
     href: "/register?plan=pro",
   },
@@ -66,8 +65,7 @@ const plans = [
       { text: "Bebas Watermark & Template Premium", included: true },
       { text: "Prioritas support 24/7", included: true },
     ],
-    cta: "Segera Hadir",
-    disabled: true,
+    cta: "Pilih Paket",
     ctaVariant: "outline" as const,
     href: "/register?plan=business",
   },
@@ -133,22 +131,14 @@ export function PricingSection() {
 
               {/* Price */}
               <div className="mb-6 min-h-[60px] flex flex-col justify-center">
-                {plan.disabled ? (
-                  <span className="text-lg font-semibold text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-lg w-fit">
-                    Segera Hadir
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-foreground">
+                    {plan.price}
                   </span>
-                ) : (
-                  <>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-foreground">
-                        {plan.price}
-                      </span>
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {plan.period}
-                    </span>
-                  </>
-                )}
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {plan.period}
+                </span>
               </div>
 
               {/* Features */}

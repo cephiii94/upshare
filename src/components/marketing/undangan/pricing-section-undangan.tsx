@@ -25,8 +25,7 @@ const plans = [
       { text: "Multi-klien dashboard", included: false },
       { text: "Prioritas support WhatsApp", included: false },
     ],
-    cta: "Segera Hadir",
-    disabled: true,
+    cta: "Pilih Paket",
     ctaVariant: "outline" as const,
     href: "/register?plan=pro",
   },
@@ -45,8 +44,7 @@ const plans = [
       { text: "Multi-klien dashboard (Manajemen mudah)", included: true },
       { text: "Prioritas support WhatsApp 24/7", included: true },
     ],
-    cta: "Segera Hadir",
-    disabled: true,
+    cta: "Pilih Paket",
     ctaVariant: "default" as const,
     href: "/register?plan=business",
   },
@@ -107,22 +105,14 @@ export function PricingSectionUndangan() {
 
               {/* Price */}
               <div className="mb-6 pb-6 border-b border-border/50 min-h-[85px] flex flex-col justify-center">
-                {plan.disabled ? (
-                  <span className="text-lg font-semibold text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-lg w-fit">
-                    Segera Hadir
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-foreground">
+                    {plan.price}
                   </span>
-                ) : (
-                  <>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-bold text-foreground">
-                        {plan.price}
-                      </span>
-                    </div>
-                    <span className="text-sm font-medium text-rose-600 dark:text-rose-400 mt-1 block">
-                      {plan.period}
-                    </span>
-                  </>
-                )}
+                </div>
+                <span className="text-sm font-medium text-rose-600 dark:text-rose-400 mt-1 block">
+                  {plan.period}
+                </span>
               </div>
 
               {/* Features */}

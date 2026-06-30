@@ -75,6 +75,20 @@ export function MarketingNavbar() {
       { label: "Fitur", href: "#features" },
       { label: "Cara Kerja", href: "#showcase" },
     ];
+  } else if (
+    pathname === "/terms" || 
+    pathname === "/privacy" || 
+    pathname === "/refund" || 
+    pathname === "/contact" || 
+    pathname === "/faq" ||
+    pathname === "/about"
+  ) {
+    activeLinks = [
+      { label: "Beranda", href: "/" },
+      { label: "Harga", href: "/#pricing" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Kontak", href: "/contact" },
+    ];
   }
 
   return (
