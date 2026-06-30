@@ -204,7 +204,6 @@ export function PricingSection() {
                   <input type="hidden" name="planId" value={plan.id} />
                   <Button
                     type="submit"
-                    disabled={plan.disabled}
                     variant={plan.badge ? "default" : plan.ctaVariant}
                     className={
                       plan.badge
