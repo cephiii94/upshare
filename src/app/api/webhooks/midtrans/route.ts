@@ -143,14 +143,15 @@ export async function POST(req: NextRequest) {
 
     // Kirim Email Notifikasi via Resend
     // Midtrans tidak mengirim email customer kecuali kita minta di request API, tapi kita bisa ambil dari database
+    const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(userId);
     const { data: profile } = await supabaseAdmin
       .from("profiles")
-      .select("full_name, email")
+      .select("full_name")
       .eq("id", userId)
       .single();
 
-    const customerEmail = profile?.email;
-    const customerName = profile?.full_name || "Customer";
+    const customerEmail = authUser?.user?.email;
+    const customerName = profile?.full_name || authUser?.user?.user_metadata?.full_name || "Customer";
 
     if (customerEmail) {
       const emailHtml = `
