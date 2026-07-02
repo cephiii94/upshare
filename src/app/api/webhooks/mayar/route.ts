@@ -140,7 +140,17 @@ export async function POST(req: NextRequest) {
       console.error("Error activating tenant:", tenantError);
     }
 
-    // 4. Kirim Email Notifikasi via Resend
+    // Kirim Email Notifikasi via Resend
+    // Midtrans tidak mengirim email customer kecuali kita minta di request API, tapi kita bisa ambil dari database
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("full_name, email")
+      .eq("id", userId)
+      .single();
+
+    const customerEmail = profile?.email;
+    const customerName = profile?.full_name || "Customer";
+
     if (customerEmail) {
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
