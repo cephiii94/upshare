@@ -1,82 +1,81 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { resend, fromEmail } from "@/lib/email/resend";
-import crypto from "crypto";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
+    // 1. Verifikasi Webhook Secret (Authorization header atau Custom Header)
+    const authHeader = req.headers.get("Authorization");
+    const mayarSecret = process.env.MAYAR_WEBHOOK_SECRET;
+
+    if (mayarSecret && mayarSecret !== "your-mayar-webhook-secret") {
+      const isAuthValid = 
+        authHeader === `Bearer ${mayarSecret}` || 
+        req.headers.get("x-mayar-signature") === mayarSecret;
+      
+      if (!isAuthValid) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    }
+
     const payload = await req.json();
+    console.log("[Mayar Webhook] Received payload:", JSON.stringify(payload, null, 2));
 
-    // 1. Verifikasi Signature Key Midtrans
-    const orderId = payload.order_id;
-    const statusCode = payload.status_code;
-    const grossAmount = payload.gross_amount;
-    const serverKey = process.env.MIDTRANS_SERVER_KEY || "";
-    const signatureKey = payload.signature_key;
-
-    const hash = crypto.createHash('sha512').update(`${orderId}${statusCode}${grossAmount}${serverKey}`).digest('hex');
-
-    if (hash !== signatureKey) {
-      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-    }
-
-    // 2. Cek status transaksi
-    const transactionStatus = payload.transaction_status;
-    const fraudStatus = payload.fraud_status;
-
-    let isPaid = false;
-
-    if (transactionStatus == 'capture') {
-        if (fraudStatus == 'accept') {
-            isPaid = true;
-        }
-    } else if (transactionStatus == 'settlement') {
-        isPaid = true;
-    }
+    // 2. Ekstrak data pembayaran
+    // Struktur payload disesuaikan dengan standar Mayar (misalnya status, data.status, dll)
+    const status = payload.status || payload.data?.status;
+    const event = payload.event;
+    
+    // Status PAID, COMPLETED, SUCCESS atau event payment.received menandakan pembayaran sukses
+    const isPaid = 
+      event === "payment.received" || 
+      status === "PAID" || 
+      status === "COMPLETED" || 
+      status === "SUCCESS" || 
+      status === "success" || 
+      status === "paid";
 
     if (!isPaid) {
-      // Abaikan jika bukan status sukses (misal pending, deny, expire, cancel)
+      // Abaikan jika bukan status sukses
       return NextResponse.json({ message: "Ignored, status not paid" }, { status: 200 });
     }
 
-    // 3. Ekstrak Custom Fields
-    // Di client.ts:
-    // custom_field1: userId
-    // custom_field2: planId
-    // custom_field3: type (atau addon_domain:tenantId)
+    const customerEmail = payload.customer?.email || payload.data?.customer?.email || payload.email || payload.data?.email;
+    const customerName = payload.customer?.name || payload.data?.customer?.name || payload.name || payload.data?.name || "Customer";
+    const customFields = payload.custom_field || payload.data?.custom_field || payload.extraData || payload.data?.extraData || {};
     
-    const userId = payload.custom_field1;
-    let planId = payload.custom_field2;
+    const userId = customFields.user_id || customFields.userId;
+    let planId = customFields.plan_id || customFields.planId;
     if (planId === "none") planId = null;
-
-    let transactionType = payload.custom_field3 || "subscription";
-    let tenantId = null;
-
-    if (transactionType.startsWith("addon_domain:")) {
-      tenantId = transactionType.split(":")[1];
-      transactionType = "addon_domain";
-    }
 
     if (!userId) {
       return NextResponse.json({ error: "Missing user_id in custom_fields" }, { status: 400 });
     }
 
+    // 3. Update Database (Supabase) via Admin (bypass RLS)
     const supabaseAdmin = getSupabaseAdmin();
+    
+    // Cek apakah ini transaksi subscription atau topup/addon
+    const transactionType = customFields.type || 'subscription';
+    const amount = parseFloat(payload.amount || payload.data?.amount || 0);
 
     if (transactionType === 'topup' || transactionType === 'addon_domain') {
-      console.log(`[Webhook] Menerima pembayaran ${transactionType} sebesar ${grossAmount} untuk user ${userId}`);
+      console.log(`[Webhook] Menerima pembayaran ${transactionType} sebesar ${amount} untuk user ${userId}`);
       
       // Catat di tabel transactions
       await supabaseAdmin.from("transactions").insert({
         user_id: userId,
         type: transactionType,
-        amount: parseFloat(grossAmount),
+        amount: amount,
         status: "success",
-        reference_id: payload.transaction_id || null,
-        description: `Pembayaran ${transactionType} berhasil via Midtrans`
+        reference_id: payload.id || payload.data?.id || null,
+        description: `Pembayaran ${transactionType} berhasil via Mayar`
       });
 
       // Jika addon_domain, perpanjang expires_at domain spesifik
+      const tenantId = customFields.tenant_id || customFields.tenantId;
       if (transactionType === 'addon_domain' && tenantId) {
         const { data: tenant } = await supabaseAdmin
           .from("tenants")
@@ -100,7 +99,7 @@ export async function POST(req: NextRequest) {
           expires_at: nextMonth.toISOString()
         }).eq("id", tenantId).eq("user_id", userId);
       } else if (transactionType === 'topup') {
-        // TODO: Tambah saldo user
+        // TODO: Tambah saldo user jika dibutuhkan
       }
 
       return NextResponse.json({ success: true, message: `Webhook processed for ${transactionType}` }, { status: 200 });
@@ -141,17 +140,7 @@ export async function POST(req: NextRequest) {
       console.error("Error activating tenant:", tenantError);
     }
 
-    // Kirim Email Notifikasi via Resend
-    // Midtrans tidak mengirim email customer kecuali kita minta di request API, tapi kita bisa ambil dari database
-    const { data: profile } = await supabaseAdmin
-      .from("profiles")
-      .select("full_name, email")
-      .eq("id", userId)
-      .single();
-
-    const customerEmail = profile?.email;
-    const customerName = profile?.full_name || "Customer";
-
+    // 4. Kirim Email Notifikasi via Resend
     if (customerEmail) {
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">

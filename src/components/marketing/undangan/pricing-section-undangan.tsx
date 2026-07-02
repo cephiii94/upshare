@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CheckCircle2, X } from "lucide-react";
 import { Sparkles, Check, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import Script from "next/script";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createCheckoutSession } from "@/app/actions/checkout";
@@ -53,11 +52,6 @@ const plans = [
 export function PricingSectionUndangan() {
   return (
     <section id="pricing" className="py-20 sm:py-28 bg-rose-50/30 dark:bg-rose-950/10">
-      <Script 
-        src={process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === 'true' ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'}
-        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
-        strategy="lazyOnload"
-      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -141,26 +135,11 @@ export function PricingSectionUndangan() {
               {plan.id ? (
                 <form action={async (formData) => {
                   const res = await createCheckoutSession(formData);
-                  if (res && res.success && res.data?.snapToken) {
-                    // Trigger Midtrans Snap
-                    // @ts-ignore
-                    window.snap.pay(res.data.snapToken, {
-                      onSuccess: function(result: any) {
-                        toast.success("Pembayaran berhasil!", { description: "Sedang mengarahkan..." });
-                        setTimeout(() => window.location.href = '/dashboard', 1500);
-                      },
-                      onPending: function(result: any) {
-                        toast.info("Menunggu pembayaran Anda!");
-                      },
-                      onError: function(result: any) {
-                        toast.error("Pembayaran gagal!");
-                      },
-                      onClose: function() {
-                        console.log('Customer closed the popup without finishing the payment');
-                      }
-                    });
+                  if (res && res.success && res.data?.paymentUrl) {
+                    toast.success("Mengarahkan ke pembayaran...");
+                    window.location.href = res.data.paymentUrl;
                   } else if (res && !res.success) {
-                    alert(res.error);
+                    toast.error(res.error);
                   }
                 }} className="w-full mt-auto">
                   <input type="hidden" name="planId" value={plan.id} />

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { createSnapTransaction } from "@/lib/midtrans/client";
+import { createPaymentLink } from "@/lib/mayar/client";
 import { safeAction } from "@/lib/safe-action";
 import crypto from "crypto";
 
@@ -44,10 +44,10 @@ export const createCheckoutSession = safeAction(async (formData: FormData) => {
 
   const orderId = `SUB-${user.id.substring(0, 8)}-${Date.now()}`;
 
-  // Buat snap token
-  const snapToken = await createSnapTransaction({
-    orderId,
-    itemName,
+  // Buat link pembayaran Mayar
+  const paymentUrl = await createPaymentLink({
+    name: itemName,
+    description: itemName,
     amount,
     customerName,
     customerEmail,
@@ -56,12 +56,12 @@ export const createCheckoutSession = safeAction(async (formData: FormData) => {
     type: "subscription"
   });
 
-  if (!snapToken) {
+  if (!paymentUrl) {
     return { success: false, error: "Gagal membuat sesi pembayaran. Silakan coba lagi nanti." };
   }
 
-  // Mengembalikan token ke klien untuk membuka pop-up
-  return { success: true, data: { snapToken } };
+  // Mengembalikan url ke klien untuk redirect
+  return { success: true, data: { paymentUrl } };
 });
 
 export const buyAddonDomain = safeAction(async (formData: FormData) => {
@@ -106,10 +106,10 @@ export const buyAddonDomain = safeAction(async (formData: FormData) => {
 
   const orderId = `ADDON-${tenantId.substring(0, 8)}-${Date.now()}`;
 
-  // Buat snap token
-  const snapToken = await createSnapTransaction({
-    orderId,
-    itemName,
+  // Buat link pembayaran Mayar
+  const paymentUrl = await createPaymentLink({
+    name: itemName,
+    description: `Aktivasi/Perpanjangan Add-on Domain selama 30 Hari`,
     amount,
     customerName,
     customerEmail,
@@ -118,9 +118,9 @@ export const buyAddonDomain = safeAction(async (formData: FormData) => {
     tenantId,
   });
 
-  if (!snapToken) {
+  if (!paymentUrl) {
     return { success: false, error: "Gagal membuat sesi pembayaran. Silakan coba lagi nanti." };
   }
 
-  return { success: true, data: { snapToken } };
+  return { success: true, data: { paymentUrl } };
 });

@@ -16,23 +16,9 @@ export function BuyAddonButton({ tenantId, isActive }: { tenantId: string; isAct
       formData.set("tenant_id", tenantId);
       const res = await buyAddonDomain(formData);
 
-      if (res && res.success && res.data?.snapToken) {
-        // @ts-ignore
-        window.snap.pay(res.data.snapToken, {
-          onSuccess: function (result: any) {
-            toast.success("Pembayaran berhasil!", { description: "Layanan telah diaktifkan." });
-            window.location.reload();
-          },
-          onPending: function (result: any) {
-            toast.info("Menunggu pembayaran Anda!");
-          },
-          onError: function (result: any) {
-            toast.error("Pembayaran gagal!");
-          },
-          onClose: function () {
-            console.log("Customer closed the popup without finishing the payment");
-          },
-        });
+      if (res && res.success && res.data?.paymentUrl) {
+        toast.success("Mengarahkan ke pembayaran...");
+        window.location.href = res.data.paymentUrl;
       } else if (res && !res.success) {
         toast.error(res.error);
       }
